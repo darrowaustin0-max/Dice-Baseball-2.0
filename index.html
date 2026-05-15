@@ -113,9 +113,16 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 /* ── LAYOUT ── */
 .main-layout{display:flex;flex-direction:column;gap:12px;position:relative;z-index:2;max-width:900px;margin:0 auto;}
 .panel-game{order:1;}
-.panel-bets{order:2;}
-.center-col{order:3;}
+.center-col{order:2;}
+.panel-bets{order:3;}
 .panel-game,.center-col,.panel-bets{width:100%;}
+.top-rail{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+.top-pill{flex:1;min-width:120px;background:#080f08;border:1px solid var(--gold-dark);border-radius:10px;padding:8px 10px;}
+.top-pill .label{font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:rgba(201,168,76,0.5);}
+.top-pill .value{font-family:'Bebas Neue',sans-serif;font-size:22px;line-height:1.1;color:var(--gold-light);}
+.top-pill .value.money{color:#66ff88;text-shadow:0 0 8px rgba(100,255,0,0.35);}
+.bottom-grid{display:grid;grid-template-columns:1fr;gap:8px;margin-top:10px;}
+@media(min-width:860px){.bottom-grid{grid-template-columns:1fr 1fr;}}
 
 /* ── PANELS ── */
 .panel{background:var(--felt-dark);border:1px solid var(--gold-dark);border-radius:4px;padding:12px;box-shadow:inset 0 0 20px rgba(0,0,0,0.3),0 4px 12px rgba(0,0,0,0.4);}
@@ -257,6 +264,13 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 .ip-fill{height:100%;background:linear-gradient(90deg,rgba(52,152,219,0.5),#74b9ff);border-radius:3px;transition:width 0.4s;}
 .dice-table{background:var(--felt-light);border:2px solid var(--gold-dark);border-radius:8px;padding:16px;text-align:center;box-shadow:inset 0 0 40px rgba(0,0,0,0.3);position:relative;min-height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;}
 .dice-table::before{content:'';position:absolute;inset:5px;border:1px solid rgba(201,168,76,0.2);border-radius:4px;pointer-events:none;}
+.dice-table .dice-container{order:1;}
+.dice-table .roll-result{order:2;}
+.dice-table .roll-actions{order:3;}
+.dice-table .roll-status-line{order:4;}
+.dice-table .dice-hud{order:5;}
+.dice-table .mode-event-card{order:6;}
+.dice-table .last-plays-card{order:7;}
 .dice-container{display:flex;gap:24px;align-items:flex-start;justify-content:center;}
 .die-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;}
 .die{width:74px;height:74px;background:var(--cream);border-radius:11px;box-shadow:4px 4px 0 rgba(0,0,0,0.5),inset 0 1px 0 rgba(255,255,255,0.8);display:flex;flex-direction:column;justify-content:space-between;padding:9px;}
@@ -325,6 +339,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 .streak-tag{font-size:9px;color:var(--fire);margin-left:3px;font-family:'Special Elite',cursive;}
 
 .mode-note{font-family:'Special Elite',cursive;font-size:10px;color:rgba(201,168,76,0.4);text-align:center;padding:4px 0;font-style:italic;}
+.compact-hidden{display:none!important;}
 
 /* Active bets */
 .active-bets-box{background:rgba(0,0,0,0.3);border:1px solid rgba(201,168,76,0.15);border-radius:3px;padding:6px;min-height:32px;font-family:'Special Elite',cursive;font-size:10px;color:rgba(201,168,76,0.5);margin-bottom:6px;}
@@ -492,6 +507,13 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 .result-banner.show{opacity:1;transform:translateX(-50%) translateY(0) scale(1);}
 .result-banner .title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:3px;color:var(--gold-light);line-height:1;}
 .result-banner .copy{font-family:'Special Elite',cursive;font-size:11px;color:rgba(245,230,200,0.72);line-height:1.6;margin-top:5px;}
+body[data-mode="quick"] .dice-hud,
+body[data-mode="quick"] .last-plays-card,
+body[data-mode="quick"] .auto-roll-bar,
+body[data-mode="quick"] #panel-quick .mode-note,
+body[data-mode="quick"] #panel-quick .bet-section,
+body[data-mode="quick"] #roll-payout-preview,
+body[data-mode="quick"] #streak-box-display{display:none!important;}
 .modal-backdrop{position:fixed;inset:0;background:rgba(2,4,3,0.78);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:18px;z-index:620;}
 .modal-backdrop.show{display:flex;}
 .modal-card{width:min(100%,420px);background:linear-gradient(180deg,rgba(16,24,17,0.98),rgba(5,8,5,0.98));border:1px solid rgba(201,168,76,0.28);border-radius:18px;padding:20px;box-shadow:0 26px 60px rgba(0,0,0,0.5);}
@@ -650,6 +672,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
         <div class="mode-desc">Generate a code, track both sides live, react between rolls, and race your opponent.</div>
       </div>
     </div>
+    <button class="utility-btn" id="power-dev-toggle" onclick="togglePowerHourOverride()">POWER DEV: OFF</button>
     <button class="menu-feature" onclick="startGame('clutch')">
       <div class="eyebrow">BONUS MODE</div>
       <div class="title">Clutch Mode</div>
@@ -700,6 +723,16 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
     <div class="panel-game active">
       <div class="panel">
         <div class="panel-title" id="left-panel-title">Game Status</div>
+        <div class="top-rail">
+          <div class="top-pill">
+            <div class="label">Bank</div>
+            <div class="value money" id="bankroll-top">$500</div>
+          </div>
+          <div class="top-pill">
+            <div class="label">Bet</div>
+            <div class="value" id="chip-top">$10</div>
+          </div>
+        </div>
 
         <!-- STATUS BAR: Outs / Runs / Roll -->
         <div class="status-bar">
@@ -832,29 +865,9 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
         </div>
 
         <!-- POWER HOUR counter -->
-        <div id="power-left-display" style="display:none">
-          <div class="power-counter" style="margin-bottom:8px">
-            <div class="pc-label">ROLLS REMAINING</div>
-            <div class="pc-val" id="pc-rolls-left">9</div>
-            <div class="pc-bar"><div class="pc-fill" id="pc-fill-left" style="width:100%"></div></div>
-          </div>
-        </div>
-
-        <!-- Hitting Streak -->
-        <div class="streak-box" id="streak-box-display">
-          <div class="streak-left">
-            <div class="s-label">Hit Streak</div>
-            <div class="streak-bonus-text" id="streak-bonus"></div>
-          </div>
-          <div class="streak-right">
-            <div class="streak-fire" id="streak-fire"></div>
-            <div class="streak-num" id="streak-num">0</div>
-          </div>
-        </div>
-
         <div class="summary-card inning-summary" id="inning-summary-card">
           <div class="summary-head">
-            <div class="section-kicker">Inning Summary</div>
+            <div class="section-kicker">Summary</div>
             <div class="heat-value neutral" id="inning-summary-runs">0 Runs</div>
           </div>
           <div class="summary-list" id="inning-summary-list">
@@ -870,22 +883,6 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
           <button class="btn-new-game" onclick="showModeScreen()">🎲 PLAY AGAIN</button>
         </div>
 
-        <div class="panel-title" style="font-size:13px;margin-top:8px">Play Log</div>
-        <div class="play-log" id="play-log">
-          <div class="log-entry"><span class="tag">[—]</span> Choose a game mode to start</div>
-        </div>
-
-        <div class="panel-title" style="font-size:13px;margin-top:8px">Daily Challenges</div>
-        <div class="challenge-list" id="challenge-list">
-          <div class="challenge-item">
-            <div class="challenge-title">Loading today&apos;s challenge...</div>
-            <div class="challenge-copy">Preparing the board.</div>
-            <div class="challenge-progress">
-              <div class="track"><div class="fill" style="width:0%"></div></div>
-              <div class="value">0/0</div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -999,24 +996,24 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
         <div class="dice-hud">
           <div class="odds-strip">
             <div class="odds-card">
-              <div class="label">Next Roll Hit</div>
-              <div class="value green" id="odds-next-hit">36.1%</div>
-            </div>
-            <div class="odds-card">
-              <div class="label">Next Roll Out</div>
-              <div class="value red" id="odds-next-out">61.1%</div>
-            </div>
-            <div class="odds-card">
-              <div class="label">Home Run</div>
-              <div class="value fire" id="odds-next-hr">2.8%</div>
-            </div>
+            <div class="label">Hit %</div>
+            <div class="value green" id="odds-next-hit">36.1%</div>
           </div>
-          <div class="heat-card">
-            <div class="heat-top">
-              <div class="section-kicker">Hot / Cold Meter</div>
-              <div class="heat-value neutral" id="heat-status">NEUTRAL</div>
-            </div>
-            <div class="heat-meter"><div class="heat-fill" id="heat-fill"></div></div>
+          <div class="odds-card">
+            <div class="label">Out %</div>
+            <div class="value red" id="odds-next-out">61.1%</div>
+          </div>
+          <div class="odds-card">
+            <div class="label">HR %</div>
+            <div class="value fire" id="odds-next-hr">2.8%</div>
+          </div>
+        </div>
+        <div class="heat-card">
+          <div class="heat-top">
+            <div class="section-kicker">Heat</div>
+            <div class="heat-value neutral" id="heat-status">NEUTRAL</div>
+          </div>
+          <div class="heat-meter"><div class="heat-fill" id="heat-fill"></div></div>
             <div class="heat-message" id="heat-message">String together three hits in your last five to heat up.</div>
           </div>
         </div>
@@ -1096,7 +1093,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
         </div>
         <div class="last-plays-card">
           <div class="heat-top">
-            <div class="section-kicker">Last 5 Plays</div>
+            <div class="section-kicker">Last 5</div>
             <div class="heat-message" id="recent-plays-subcopy">Recent swings update after every roll.</div>
           </div>
           <div class="last-plays-list" id="last-plays-list">
@@ -1108,40 +1105,12 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
           </div>
         </div>
       </div>
-
-      <div class="panel">
-        <div class="panel-title">Combo Outcomes</div>
-        <div class="outcome-table">
-          <div class="outcome-row hdr"><div>COMBO</div><div>OUTCOME</div><div style="text-align:right">TYPE</div></div>
-          <div class="outcome-row" id="row-1-1"><div class="rn">1+1</div><div class="pn">Double</div><div class="pt hit">HIT</div></div>
-          <div class="outcome-row" id="row-1-2"><div class="rn">1+2</div><div class="pn">Out</div><div class="pt out">OUT</div></div>
-          <div class="outcome-row" id="row-1-3"><div class="rn">1+3</div><div class="pn">Out</div><div class="pt out">OUT</div></div>
-          <div class="outcome-row" id="row-1-4"><div class="rn">1+4</div><div class="pn">Single</div><div class="pt hit">HIT</div></div>
-          <div class="outcome-row" id="row-1-5"><div class="rn">1+5</div><div class="pn">Flyout</div><div class="pt out">OUT</div></div>
-          <div class="outcome-row" id="row-1-6"><div class="rn">1+6</div><div class="pn">Out</div><div class="pt out">OUT</div></div>
-          <div class="outcome-row" id="row-2-2"><div class="rn">2+2</div><div class="pn">Double</div><div class="pt hit">HIT</div></div>
-          <div class="outcome-row" id="row-2-3"><div class="rn">2+3</div><div class="pn">Single</div><div class="pt hit">HIT</div></div>
-          <div class="outcome-row" id="row-2-4"><div class="rn">2+4</div><div class="pn">Out</div><div class="pt out">OUT</div></div>
-          <div class="outcome-row" id="row-2-5"><div class="rn">2+5</div><div class="pn">Out</div><div class="pt out">OUT</div></div>
-          <div class="outcome-row" id="row-2-6"><div class="rn">2+6</div><div class="pn">Single</div><div class="pt hit">HIT</div></div>
-          <div class="outcome-row" id="row-3-3"><div class="rn">3+3</div><div class="pn">Single</div><div class="pt hit">HIT</div></div>
-          <div class="outcome-row" id="row-3-4"><div class="rn">3+4</div><div class="pn">Single</div><div class="pt hit">HIT</div></div>
-          <div class="outcome-row" id="row-3-5"><div class="rn">3+5</div><div class="pn">Out</div><div class="pt out">OUT</div></div>
-          <div class="outcome-row" id="row-3-6"><div class="rn">3+6</div><div class="pn">Out</div><div class="pt out">OUT</div></div>
-          <div class="outcome-row" id="row-4-4"><div class="rn">4+4</div><div class="pn">Double</div><div class="pt hit">HIT</div></div>
-          <div class="outcome-row" id="row-4-5"><div class="rn">4+5</div><div class="pn">Out</div><div class="pt out">OUT</div></div>
-          <div class="outcome-row" id="row-4-6"><div class="rn">4+6</div><div class="pn">Out</div><div class="pt out">OUT</div></div>
-          <div class="outcome-row" id="row-5-5"><div class="rn">5+5</div><div class="pn">Single</div><div class="pt hit">HIT</div></div>
-          <div class="outcome-row" id="row-5-6"><div class="rn">5+6</div><div class="pn">Out</div><div class="pt out">OUT</div></div>
-          <div class="outcome-row hr-row" id="row-6-6"><div class="rn" style="color:#ff4444">6+6</div><div class="pn" style="color:#ff8888">⚡ Home Run ⚡</div><div class="pt hr">HR!</div></div>
-        </div>
-      </div>
     </div>
 
     <!-- RIGHT: Betting -->
     <div class="panel-bets">
       <div class="panel">
-        <div class="panel-title">Betting Board</div>
+        <div class="panel-title">Bets</div>
 
         <div class="bankroll-bar">
           <div class="bankroll-label">Bankroll</div>
@@ -1149,6 +1118,16 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
         </div>
         <div class="balance-meter"><div class="balance-meter-fill" id="balance-meter-fill"></div></div>
         <div class="bankroll-health-note" id="bankroll-health-note">Healthy stack. Keep pressing the action.</div>
+        <div class="streak-box" id="streak-box-display">
+          <div class="streak-left">
+            <div class="s-label">Streak</div>
+            <div class="streak-bonus-text" id="streak-bonus"></div>
+          </div>
+          <div class="streak-right">
+            <div class="streak-fire" id="streak-fire"></div>
+            <div class="streak-num" id="streak-num">0</div>
+          </div>
+        </div>
 
         <div class="bet-control-card">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
@@ -1177,7 +1156,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 
         <!-- QUICK ROLL BETS -->
         <div class="bet-panel active" id="panel-quick" style="display:none">
-          <div class="mode-note" style="color:rgba(231,76,60,0.8);margin-bottom:8px">One roll — bets settle instantly</div>
+          <div class="mode-note" style="color:rgba(231,76,60,0.8);margin-bottom:8px">1 roll.</div>
           <div class="quick-grid">
             <button class="quick-action hit" id="quick-bet-hit" onclick="quickBetAndRoll('hit','Bet Hit',1.5,this)">
               ⚾ HIT<div class="subodds" id="quick-hit-odds">1.5x</div>
@@ -1188,7 +1167,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
           </div>
           <div class="bankroll-health-note" id="quick-streak-note">Win 2 in a row for +10% odds. Win 3+ for +25%.</div>
           <div class="bet-section">
-            <div class="bst">Better Odds — Exact Hit</div>
+            <div class="bst">Exact Hit</div>
             <div class="bet-options">
               <button class="bet-btn" onclick="placeBet('single','Single',2.5)"><span>Single</span><span class="bo" id="odds-single">2.5x</span></button>
               <button class="bet-btn" onclick="placeBet('double','Double',7)"><span>Double</span><span class="bo" id="odds-double">7x</span></button>
@@ -1206,7 +1185,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
         </div>
 
         <div class="bet-panel" id="panel-clutch" style="display:none">
-          <div class="mode-note" style="color:rgba(255,107,0,0.85);margin-bottom:8px">Pressure inning: runners aboard, higher payouts, next roll decides everything.</div>
+          <div class="mode-note" style="color:rgba(255,107,0,0.85);margin-bottom:8px">Pressure spot.</div>
           <div class="quick-grid">
             <button class="quick-action hit" onclick="placeBet('hit','Clutch Hit',1.8)">
               ⚾ HIT<div class="subodds">1.8x</div>
@@ -1216,7 +1195,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
             </button>
           </div>
           <div class="bet-section">
-            <div class="bst">Clutch Specials</div>
+            <div class="bst">Clutch</div>
             <div class="bet-options">
               <button class="bet-btn" onclick="placeBet('single','Clutch Single',3)"><span>Single</span><span class="bo">3.0x</span></button>
               <button class="bet-btn" onclick="placeBet('double','Clutch Double',8)"><span>Double</span><span class="bo">8.0x</span></button>
@@ -1235,7 +1214,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 
         <!-- STANDARD BETS (Hot Streak per-roll) -->
         <div class="bet-panel active" id="panel-standard">
-          <div class="mode-note" style="color:rgba(255,107,0,0.8);margin-bottom:6px">Settle on each roll</div>
+          <div class="mode-note" style="color:rgba(255,107,0,0.8);margin-bottom:6px">Per roll.</div>
           <div class="bet-section">
             <div class="bet-options">
               <button class="bet-btn" onclick="placeBet('hit','Hit',1.5)"><span>HIT <span id="streak-hit-indicator"></span></span><span class="bo" id="odds-hit">1.5x</span></button>
@@ -1257,9 +1236,9 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 
         <!-- FULL INNING BETS -->
         <div class="bet-panel" id="panel-inning" style="display:none">
-          <div class="mode-note" style="color:rgba(46,204,113,0.7);margin-bottom:5px">Settle at end of inning</div>
+          <div class="mode-note" style="color:rgba(46,204,113,0.7);margin-bottom:5px">End of inning.</div>
           <div class="bet-section">
-            <div class="bst">Any Time This Inning</div>
+            <div class="bst">Any Time</div>
             <div class="bet-options">
               <button class="bet-btn" onclick="placeAnyTimeBet('anytime-single','Any Time Single',2.2)"><span>Any Time Single</span><span class="bo">2.2x</span></button>
               <button class="bet-btn" onclick="placeAnyTimeBet('anytime-double','Any Time Double',3.5)"><span>Any Time Double</span><span class="bo">3.5x</span></button>
@@ -1275,7 +1254,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
             <div class="bpg-profit" id="app-profit"></div>
           </div>
           <div class="bet-section" style="margin-top:6px">
-            <div class="bst">Over/Under Runs This Inning</div>
+            <div class="bst">Runs O/U</div>
             <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:11px;color:rgba(201,168,76,0.6)">LINE</span>
               <input type="number" id="ou-standard-line" value="1.5" min="0.5" max="20.5" step="1"
@@ -1415,9 +1394,9 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
             <div class="pc-val" id="pc-rolls">9</div>
             <div class="pc-bar"><div class="pc-fill" id="pc-fill" style="width:100%"></div></div>
           </div>
-          <div class="mode-note" style="color:rgba(52,152,219,0.8);margin-bottom:6px">9 rolls total — bet on final runs scored</div>
+          <div class="mode-note" style="color:rgba(52,152,219,0.8);margin-bottom:6px">9 rolls total.</div>
           <div class="bet-section">
-            <div class="bst">Over/Under Total Runs (9 rolls)</div>
+            <div class="bst">Runs O/U</div>
             <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px">
               <span style="font-family:'Bebas Neue',sans-serif;font-size:11px;color:rgba(201,168,76,0.6)">LINE</span>
               <input type="number" id="power-ou-line" value="1.5" min="0.5" max="10.5" step="1"
@@ -1430,7 +1409,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
             </div>
           </div>
           <div class="bet-section">
-            <div class="bst">Exact Outcomes (settle each roll)</div>
+            <div class="bst">Exact Roll</div>
             <div class="bet-options">
               <button class="bet-btn" onclick="placeBet('hit','Hit',1.5)"><span>HIT</span><span class="bo">1.5x</span></button>
               <button class="bet-btn" onclick="placeBet('out','Out',1.1)"><span>OUT</span><span class="bo">1.1x</span></button>
@@ -1449,8 +1428,8 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 
         <!-- GRAND SLAM BETS -->
         <div class="bet-panel" id="panel-grandslam" style="display:none">
-          <div class="mode-note" style="color:rgba(241,196,15,0.8);margin-bottom:6px">Bases loaded. One roll. 6+6 wins it all.</div>
-          <div class="mode-note" style="color:rgba(201,168,76,0.5);margin-bottom:8px;font-size:10px">🏅 Any RBI scored (non-HR) earns +$5 bonus credit per run</div>
+          <div class="mode-note" style="color:rgba(241,196,15,0.8);margin-bottom:6px">Bases loaded. 1 roll.</div>
+          <div class="mode-note" style="color:rgba(201,168,76,0.5);margin-bottom:8px;font-size:10px">RBI bonus: +$5 per run.</div>
           <div class="grandslam-bases" id="gs-bases-display">
             <div class="gs-base"></div><div class="gs-base"></div><div class="gs-base"></div>
           </div>
@@ -1660,16 +1639,55 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 
         <!-- Active Bets -->
         <div style="margin-top:8px">
-          <div class="bst">Parlay Tracker</div>
-          <div class="parlay-tracker-board" id="active-parlays-board">
-            <div class="p-empty">Build a parlay to watch every leg live.</div>
+          <div id="live-parlay-section">
+            <div class="bst">Parlays</div>
+            <div class="parlay-tracker-board" id="active-parlays-board">
+              <div class="p-empty">Build a parlay to watch every leg live.</div>
+            </div>
           </div>
-          <div class="bst">Active Bets</div>
-          <div class="active-bets-box" id="active-bets-box">No bets placed.</div>
-          <button class="btn-clear" onclick="clearAllBets()">✕ CLEAR BETS</button>
-          <div style="margin-top:6px">
-            <div class="bst">Payouts</div>
-            <div class="payout-log" id="payout-log"><div class="log-entry">—</div></div>
+          <div id="bet-summary-section">
+            <div class="bst">Open Bets</div>
+            <div class="active-bets-box" id="active-bets-box">No bets placed.</div>
+            <button class="btn-clear" onclick="clearAllBets()">✕ CLEAR</button>
+            <div style="margin-top:6px">
+              <div class="bst">Settled</div>
+              <div class="payout-log" id="payout-log"><div class="log-entry">—</div></div>
+            </div>
+          </div>
+          <div class="bottom-grid">
+            <div class="panel">
+              <div class="panel-title" style="font-size:13px;margin-bottom:8px">Log</div>
+              <div class="play-log" id="play-log">
+                <div class="log-entry"><span class="tag">[—]</span> Choose a game mode to start</div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-title" style="font-size:13px;margin-bottom:8px">Combos</div>
+              <div class="outcome-table">
+                <div class="outcome-row hdr"><div>COMBO</div><div>OUTCOME</div><div style="text-align:right">TYPE</div></div>
+                <div class="outcome-row" id="row-1-1"><div class="rn">1+1</div><div class="pn">Double</div><div class="pt hit">HIT</div></div>
+                <div class="outcome-row" id="row-1-2"><div class="rn">1+2</div><div class="pn">Out</div><div class="pt out">OUT</div></div>
+                <div class="outcome-row" id="row-1-3"><div class="rn">1+3</div><div class="pn">Out</div><div class="pt out">OUT</div></div>
+                <div class="outcome-row" id="row-1-4"><div class="rn">1+4</div><div class="pn">Single</div><div class="pt hit">HIT</div></div>
+                <div class="outcome-row" id="row-1-5"><div class="rn">1+5</div><div class="pn">Flyout</div><div class="pt out">OUT</div></div>
+                <div class="outcome-row" id="row-1-6"><div class="rn">1+6</div><div class="pn">Out</div><div class="pt out">OUT</div></div>
+                <div class="outcome-row" id="row-2-2"><div class="rn">2+2</div><div class="pn">Double</div><div class="pt hit">HIT</div></div>
+                <div class="outcome-row" id="row-2-3"><div class="rn">2+3</div><div class="pn">Single</div><div class="pt hit">HIT</div></div>
+                <div class="outcome-row" id="row-2-4"><div class="rn">2+4</div><div class="pn">Out</div><div class="pt out">OUT</div></div>
+                <div class="outcome-row" id="row-2-5"><div class="rn">2+5</div><div class="pn">Out</div><div class="pt out">OUT</div></div>
+                <div class="outcome-row" id="row-2-6"><div class="rn">2+6</div><div class="pn">Single</div><div class="pt hit">HIT</div></div>
+                <div class="outcome-row" id="row-3-3"><div class="rn">3+3</div><div class="pn">Single</div><div class="pt hit">HIT</div></div>
+                <div class="outcome-row" id="row-3-4"><div class="rn">3+4</div><div class="pn">Single</div><div class="pt hit">HIT</div></div>
+                <div class="outcome-row" id="row-3-5"><div class="rn">3+5</div><div class="pn">Out</div><div class="pt out">OUT</div></div>
+                <div class="outcome-row" id="row-3-6"><div class="rn">3+6</div><div class="pn">Out</div><div class="pt out">OUT</div></div>
+                <div class="outcome-row" id="row-4-4"><div class="rn">4+4</div><div class="pn">Double</div><div class="pt hit">HIT</div></div>
+                <div class="outcome-row" id="row-4-5"><div class="rn">4+5</div><div class="pn">Out</div><div class="pt out">OUT</div></div>
+                <div class="outcome-row" id="row-4-6"><div class="rn">4+6</div><div class="pn">Out</div><div class="pt out">OUT</div></div>
+                <div class="outcome-row" id="row-5-5"><div class="rn">5+5</div><div class="pn">Single</div><div class="pt hit">HIT</div></div>
+                <div class="outcome-row" id="row-5-6"><div class="rn">5+6</div><div class="pn">Out</div><div class="pt out">OUT</div></div>
+                <div class="outcome-row hr-row" id="row-6-6"><div class="rn" style="color:#ff4444">6+6</div><div class="pn" style="color:#ff8888">⚡ Home Run ⚡</div><div class="pt hr">HR!</div></div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1892,6 +1910,7 @@ const POWER_HOUR_DURATION_MS = 60 * 60 * 1000;
 const JACKPOT_BASE = 250;
 const POWER_BOARD_KEY = 'dicebaseball_power_board_v2';
 const POWER_SESSION_KEY = 'dicebaseball_power_session_v1';
+const POWER_DEV_KEY = 'dicebaseball_power_dev_v1';
 const DAILY_PROGRESS_KEY = 'dicebaseball_daily_progress_v2';
 const BET_HISTORY_KEY = 'dicebaseball_bet_history_v2';
 const GS_DAILY_KEY = 'dicebaseball_grandslam_daily_v2';
@@ -1928,6 +1947,15 @@ function loadStore(key, fallback){
   }
 }
 function saveStore(key, value){ try{ localStorage.setItem(key, JSON.stringify(value)); }catch(e){} }
+function loadFlag(key){
+  try{ return localStorage.getItem(key)==='1'; }catch(e){ return false; }
+}
+function saveFlag(key, value){
+  try{
+    if(value) localStorage.setItem(key,'1');
+    else localStorage.removeItem(key);
+  }catch(e){}
+}
 function localDateKey(date=new Date()){
   const y=date.getFullYear();
   const m=String(date.getMonth()+1).padStart(2,'0');
@@ -1968,6 +1996,9 @@ function saveDailyProgress(data){ saveStore(DAILY_PROGRESS_KEY,data); }
 function getBetHistory(){ return loadStore(BET_HISTORY_KEY,[]); }
 function saveBetHistory(history){ saveStore(BET_HISTORY_KEY,history.slice(0,25)); }
 function getPowerHourInfo(now=new Date()){
+  if(loadFlag(POWER_DEV_KEY)){
+    return { active:true, override:true, start:now, end:new Date(now.getTime()+POWER_HOUR_DURATION_MS), msLeft:POWER_HOUR_DURATION_MS };
+  }
   const start=new Date(now);
   start.setHours(POWER_HOUR_START_HOUR,0,0,0);
   const end=new Date(start.getTime()+POWER_HOUR_DURATION_MS);
@@ -2028,6 +2059,19 @@ function showReaction(emoji){
   toast.textContent=emoji;
   toast.classList.add('show');
   setTimeout(()=>toast.classList.remove('show'),1000);
+}
+function updatePowerDevToggle(){
+  const btn=document.getElementById('power-dev-toggle');
+  if(!btn) return;
+  btn.textContent = `POWER DEV: ${loadFlag(POWER_DEV_KEY)?'ON':'OFF'}`;
+}
+function togglePowerHourOverride(){
+  const next=!loadFlag(POWER_DEV_KEY);
+  saveFlag(POWER_DEV_KEY, next);
+  savePowerSession({date:localDateKey(),completed:false,score:null});
+  updatePowerDevToggle();
+  updateModeEventCards();
+  showPayoutFlash(next ? 'POWER DEV ON' : 'POWER DEV OFF', next);
 }
 function toggleStatsScreen(){
   const screen=document.getElementById('stats-screen');
@@ -2156,11 +2200,16 @@ function renderStaticOdds(){
   setText('odds-next-out', formatPct(STATIC_NEXT_ODDS.out));
   setText('odds-next-hr', formatPct(STATIC_NEXT_ODDS.hr));
 }
+function updateTopRail(){
+  setText('bankroll-top', `$${G.bankroll}`);
+  setText('chip-top', `$${G.chipValue}`);
+}
 function handleChipInput(value){
   const parsed=Math.max(1, Math.floor(parseFloat(value)||1));
   G.chipValue=parsed;
   const input=document.getElementById('chip-input');
   if(input && String(parsed)!==String(input.value)) input.value=parsed;
+  updateTopRail();
   refreshBettingAvailability();
   renderParlayLegs();
 }
@@ -2216,7 +2265,7 @@ function refreshBettingAvailability(){
   if(bankBar) bankBar.classList.toggle('low', low);
   if(bankAmt) bankAmt.classList.toggle('low', low);
   if(note){
-    note.textContent = G.bankroll<=0 ? 'No bankroll left. Reset or lower the stake to get back in.' : low ? 'Danger zone. Balance is below 10% of the starting roll.' : 'Healthy stack. Keep pressing the action.';
+        note.textContent = G.bankroll<=0 ? 'No bankroll left.' : low ? 'Balance under 10%.' : 'Stack healthy.';
   }
   const canAfford = G.bankroll >= Math.max(1, G.chipValue||1);
   const wagerButtons=[...document.querySelectorAll('.bet-panel button, .quick-action')].filter(btn=>{
@@ -2239,7 +2288,7 @@ function renderRecentPlays(){
   const plays=G.recentPlays.slice(0,5);
   if(!plays.length){
     list.innerHTML=`<div class="last-play-item"><div class="last-play-roll">--</div><div class="last-play-outcome">No plays yet.</div><div class="last-play-tag">WAITING</div></div>`;
-    setText('recent-plays-subcopy','Recent swings update after every roll.');
+    setText('recent-plays-subcopy','Updates after each roll.');
     return;
   }
   list.innerHTML=plays.map(play=>{
@@ -2248,7 +2297,7 @@ function renderRecentPlays(){
     return `<div class="last-play-item"><div class="last-play-roll">${play.roll}</div><div class="last-play-outcome">${play.text}</div><div class="last-play-tag ${cls}">${label}</div></div>`;
   }).join('');
   const hits=plays.filter(play=>play.cat==='hit'||play.type==='hr').length;
-  setText('recent-plays-subcopy', hits>=3 ? 'Recent swings are turning into production.' : 'Keep an eye on the last five for the next streak.');
+  setText('recent-plays-subcopy', hits>=3 ? 'Bat is heating up.' : 'Watch the last five.');
 }
 function renderHeatMeter(){
   const recent=G.recentPlays.slice(0,5);
@@ -2263,15 +2312,15 @@ function renderHeatMeter(){
   if(hits>=3){
     status.textContent='HOT';
     status.className='heat-value hot';
-    message.textContent="You're hot! Three or more recent hits have the table leaning your way.";
+    message.textContent="You're hot!";
   } else if(outs>=3){
     status.textContent='COLD';
     status.className='heat-value cold';
-    message.textContent='Cold streak. Multiple outs are piling up in the last five rolls.';
+    message.textContent='Cold streak.';
   } else {
     status.textContent='NEUTRAL';
     status.className='heat-value neutral';
-    message.textContent='Even table. One big swing can flip the momentum instantly.';
+    message.textContent='Table is even.';
   }
 }
 function recordRecentPlay(outcome,v1,v2,runs){
@@ -2430,23 +2479,25 @@ function updateModeEventCards(){
   if(gsCard) gsCard.style.display = G.mode==='grandslam' ? 'block' : 'none';
   const powerInfo=getPowerHourInfo();
   const powerSession=getPowerSession();
-  setText('power-countdown', formatCountdown(powerInfo.msLeft));
-  setText('power-event-status', powerSession.completed ? 'COMPLETE' : powerInfo.active ? 'LIVE' : 'LOCKED');
+  setText('power-countdown', powerInfo.override ? 'DEV' : formatCountdown(powerInfo.msLeft));
+  setText('power-event-status', powerSession.completed ? 'DONE' : powerInfo.override ? 'DEV' : powerInfo.active ? 'LIVE' : 'LOCKED');
   const board=getPowerBoard().entries.sort((a,b)=>b.score-a.score).slice(0,10);
   const topScore=board[0]?.score || 0;
   setText('power-top-score', topScore);
   const playerRank=board.findIndex(entry=>entry.me);
   setText('power-rank', playerRank>=0 ? `#${playerRank+1}` : '#--');
-  setText('power-reward-copy', powerSession.completed ? `Today's 9-roll run is locked at ${powerSession.score||0} runs.` : powerInfo.active ? '1st place earns the top bonus bet. Top 25% of entries still take a smaller reward.' : `Next session opens in ${formatCountdown(powerInfo.msLeft)}.`);
+  setText('power-reward-copy', powerSession.completed ? `Today's 9-roll run is locked at ${powerSession.score||0} runs.` : powerInfo.override ? 'Dev override is active. You can test the 9-roll event right now.' : powerInfo.active ? '9 rolls. Post the best score you can.' : `Next session opens in ${formatCountdown(powerInfo.msLeft)}.`);
   const powerModeCard=document.getElementById('power-mode-card');
   const powerModeTag=document.getElementById('power-mode-tag');
   const powerModeDesc=document.getElementById('power-mode-desc');
   const powerLocked=!powerInfo.active || powerSession.completed;
   if(powerModeCard) powerModeCard.classList.toggle('locked', powerLocked);
-  if(powerModeTag) powerModeTag.textContent = powerSession.completed ? 'COMPLETE' : powerInfo.active ? 'LIVE EVENT' : 'LOCKED';
+  if(powerModeTag) powerModeTag.textContent = powerSession.completed ? 'DONE' : powerInfo.override ? 'DEV LIVE' : powerInfo.active ? 'LIVE EVENT' : 'LOCKED';
   if(powerModeDesc){
     powerModeDesc.textContent = powerSession.completed
       ? `Today's Power Hour is complete. Final score: ${powerSession.score||0} runs.`
+      : powerInfo.override
+        ? 'Dev override is on. Test the event outside the live hour.'
       : powerInfo.active
         ? 'Live now. You get exactly 9 rolls to post your score to the board.'
         : `Locked until the next window. Countdown: ${formatCountdown(powerInfo.msLeft)}.`;
@@ -2465,6 +2516,7 @@ function updateModeEventCards(){
   setText('gs-reset-time', formatCountdown(tomorrow - new Date()));
   setText('gs-bonus-prize', '$50');
   setText('gs-event-copy', gsDaily.played ? 'You already took today’s swing. Jackpot rolls into tomorrow if nobody hits it.' : 'One shot today. Miss and the jackpot grows. Hit and the bonus prize lands too.');
+  updatePowerDevToggle();
 }
 function markSessionProgress(winAmount=0){
   G.session.rounds=(G.session.rounds||0)+1;
@@ -2484,7 +2536,7 @@ function renderParlayTracker(){
     const wins=p.legs.filter(leg=>leg.settled===true).length;
     const losses=p.legs.filter(leg=>leg.settled===false).length;
     const icons=p.legs.map(leg=>leg.settled===true?'✅':leg.settled===false?'❌':'⏳').join(' ');
-    const note=p.note || (losses ? 'Parlay Lost' : p.done ? 'Parlay Won' : 'Waiting for the next scoring event.');
+    const note=p.note || (losses ? 'Parlay Lost' : p.done ? 'Parlay Won' : 'Live');
     const payout = p.payout || (p.done ? Math.round(p.stake*p.mult) : 0);
     return `<div class="parlay-card"><div class="parlay-progress"><div class="parlay-progress-icons">${icons}</div><div class="parlay-progress-text">${wins}/${p.legs.length} Legs Hit</div></div><div class="parlay-meta"><div class="parlay-meta-item"><div class="label">Bet</div><div class="value">$${p.stake}</div></div><div class="parlay-meta-item"><div class="label">Potential</div><div class="value">$${Math.round(p.stake*p.mult)}</div></div><div class="parlay-meta-item"><div class="label">Actual</div><div class="value">$${payout}</div></div></div>${p.legs.map((leg,i)=>`<div class="parlay-row ${leg.settled===true?'win':leg.settled===false?'loss':'ready'} ${p.closestMiss===i?'closest':''}" style="animation-delay:${i*90}ms"><div class="icon">${leg.settled===true?'✅':leg.settled===false?'✖':'🎯'}</div><div class="label">${leg.label}</div><div class="result">${leg.settled===true?'HIT':leg.settled===false?'LOST':'READY'}</div></div>`).join('')}<div class="parlay-note">${note}</div></div>`;
   }).join('');
@@ -2556,13 +2608,14 @@ function showModeScreen(){
   clearQuickActionState();
   document.getElementById('stats-screen').style.display='none';
   document.getElementById('result-banner').classList.remove('show');
+  document.body.setAttribute('data-mode','menu');
   document.getElementById('mode-screen').style.display='flex';
   document.getElementById('h2h-setup').style.display='none';
   document.querySelector('.mode-cards').style.display='flex';
   document.getElementById('bankroll-mode-screen').textContent=G.bankroll;
   document.getElementById('game-over-card').style.display='none';
   document.getElementById('roll-result').textContent='— SELECT A MODE —';
-  setText('roll-status-line','Locked in and waiting for the next roll.');
+  setText('roll-status-line','Ready for the next roll.');
   document.getElementById('btn-roll').disabled=true;
   document.getElementById('btn-next-roll').classList.remove('visible');
   const inlineSt=document.getElementById('inline-status');
@@ -2596,6 +2649,7 @@ function startGame(mode){
   stopAutoRoll();
   clearQuickActionState();
   document.getElementById('result-banner').classList.remove('show');
+  document.body.setAttribute('data-mode', mode);
   G.outs=0; G.bases=[false,false,false]; G.runs=0;
   G.hitStreak=0; G.rolling=false; G.gameOver=false;
   G.lastWasHit=false; G.streakHRHit=false; G.survivalMult=1.0;
@@ -2616,7 +2670,7 @@ function startGame(mode){
 
   document.getElementById('mode-screen').style.display='none';
   document.getElementById('game-over-card').style.display='none';
-  ['power-left-display','h2h-left-display'].forEach(id=>{ const e=document.getElementById(id); if(e) e.style.display='none'; });
+  ['h2h-left-display'].forEach(id=>{ const e=document.getElementById(id); if(e) e.style.display='none'; });
   const sf2=document.getElementById('field-standard'); if(sf2) sf2.style.display='block';
   const sd2=document.getElementById('out-dots-standard'); if(sd2) sd2.style.display='flex';
   // Show inline status for all modes
@@ -2656,6 +2710,8 @@ function startGame(mode){
   ['tab-standard-btn','tab-streak-btn','tab-parlay-btn'].forEach(id=>{
     const el=document.getElementById(id); if(el) el.style.display='none';
   });
+  const tabRow=document.getElementById('bet-tabs-row');
+  if(tabRow) tabRow.style.display = ['inning','power','h2h'].includes(mode) ? 'flex' : 'none';
   if(mode==='quick'){
     document.getElementById('panel-quick').style.display='block';
     document.getElementById('tab-standard-btn').style.display='block';
@@ -2719,13 +2775,23 @@ function startGame(mode){
   document.getElementById('sv-roll').textContent='—';
   document.getElementById('lbl1').textContent='—';
   document.getElementById('lbl2').textContent='—';
-  document.getElementById('roll-result').textContent=mode==='quick'?'Tap HIT or OUT to fire the next Quick Roll.':mode==='clutch'?'Runners on 2nd and 3rd. One swing changes everything.':'Place your bets & roll!';
+  document.getElementById('roll-result').textContent=mode==='quick'?'Tap HIT or OUT.':mode==='clutch'?'Pressure spot.':'Place your bets & roll!';
   document.getElementById('roll-result').className='roll-result';
-  setText('roll-status-line', mode==='quick'?'One tap on HIT or OUT places the bet and rolls instantly.':mode==='power'?'Live event is open. Nine rolls only.':mode==='grandslam'?'Daily jackpot is on the board.':mode==='clutch'?'Pressure counts are already loaded.':'Place a wager, read the odds, then fire away.');
-  document.getElementById('btn-roll').textContent = mode==='quick' ? 'ROLL EXACT BET' : '🎲 ROLL 🎲';
+  setText('roll-status-line', mode==='quick'?'One tap bets and rolls.':mode==='power'?'Live now. 9 rolls only.':mode==='grandslam'?'Jackpot is live.':mode==='clutch'?'Pressure counts are loaded.':'Bet, then roll.');
+  document.getElementById('btn-roll').textContent = 'ROLL';
   document.getElementById('btn-roll').disabled=false;
   document.getElementById('btn-next-roll').classList.remove('visible');
   document.querySelectorAll('.outcome-row').forEach(r=>r.classList.remove('active-roll'));
+  const diceHud=document.querySelector('.dice-hud');
+  if(diceHud) diceHud.style.display = mode==='quick' ? 'none' : 'grid';
+  const lastPlays=document.querySelector('.last-plays-card');
+  if(lastPlays) lastPlays.style.display = mode==='quick' ? 'none' : 'block';
+  const autoBar=document.querySelector('.auto-roll-bar');
+  if(autoBar) autoBar.style.display = ['inning','power'].includes(mode) ? 'flex' : 'none';
+  const liveParlaySection=document.getElementById('live-parlay-section');
+  if(liveParlaySection) liveParlaySection.style.display = ['inning','power','h2h'].includes(mode) ? 'block' : 'none';
+  const betSummarySection=document.getElementById('bet-summary-section');
+  if(betSummarySection) betSummarySection.style.display = mode==='quick' ? 'none' : 'block';
 
   if(mode==='grandslam' && getGrandSlamDaily().played){
     G.gameOver=true;
@@ -2920,7 +2986,7 @@ function processPlay(outcome,v1,v2){
   recordRecentPlay(outcome,v1,v2,runs);
   updateChallengeProgress('roll',{outcomeType:outcome.type});
   G.session.bestStreak=Math.max(G.session.bestStreak||0, G.hitStreak);
-  setText('roll-status-line', outcome.type==='out' ? 'Out on the board. Read the field and decide the next move.' : outcome.type==='hr' ? 'Ball jumped. Momentum is all the way live.' : 'Contact made. Watch the meter and press the next edge.');
+  setText('roll-status-line', outcome.type==='out' ? 'Out recorded. Read the field.' : outcome.type==='hr' ? 'Ball jumped. Stay hot.' : 'Contact made. Bet the next roll.');
   addLog(logText,logClass,v1,v2);
   showResultBanner(outcome.type==='hr'?'HOME RUN':outcome.name.toUpperCase(), buildResultBannerCopy(outcome, runs));
 
@@ -3187,7 +3253,7 @@ function autoResetGame(mode){
   document.getElementById('base3').className='base base-3rd';
   document.getElementById('game-over-card').style.display='none';
   document.querySelectorAll('.outcome-row').forEach(r=>r.classList.remove('active-roll'));
-  setText('roll-status-line', mode==='power'?'Fresh event round ready.':'Place your bets & roll!');
+  setText('roll-status-line', mode==='power'?'Fresh round ready.':'Place your bets & roll!');
   updateStreakDisplay();
   updateStreakOdds();
   updateInningBoard();
@@ -3652,6 +3718,7 @@ function renderParlayLegs(){
 function updateBankrollDisplay(){
   document.getElementById('bankroll-display').textContent='$'+G.bankroll;
   document.getElementById('bankroll-mode-screen').textContent=G.bankroll;
+  updateTopRail();
   refreshBettingAvailability();
   renderMenuSessionBrief();
   updateModeEventCards();
@@ -4149,13 +4216,11 @@ function endH2H(winnerIdx){
 function updatePowerCounter(){
   const left = G.powerRollsLeft;
   setText('pc-rolls', left);
-  setText('pc-rolls-left', left);
   setText('ip-rolls-center', left);
   const pct = (left/9)*100;
-  ['pc-fill','pc-fill-left','ip-fill-center'].forEach(id=>{
+  ['pc-fill','ip-fill-center'].forEach(id=>{
     const el=document.getElementById(id); if(el) el.style.width=pct+'%';
   });
-  document.getElementById('power-left-display').style.display='block';
   updateModeEventCards();
 }
 
