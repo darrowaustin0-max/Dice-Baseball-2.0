@@ -64,6 +64,12 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 .menu-feature .eyebrow{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:2px;color:#ffaa44;}
 .menu-feature .title{font-family:'Bebas Neue',sans-serif;font-size:25px;letter-spacing:2px;color:#ffd09a;margin:3px 0;}
 .menu-feature .copy{font-family:'Oswald',sans-serif;font-size:13px;color:rgba(245,230,200,0.72);line-height:1.4;}
+.menu-override-row{width:100%;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;}
+.test-mode-flag{display:none;align-items:center;justify-content:center;padding:8px 12px;border-radius:999px;background:rgba(231,76,60,0.16);border:1px solid rgba(255,118,117,0.5);color:#ffb3ad;font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;box-shadow:0 0 18px rgba(231,76,60,0.14);}
+.test-mode-flag.active{display:inline-flex;}
+.test-mode-flag.game-flag{position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:480;background:rgba(52,10,10,0.94);}
+body.test-mode .table{box-shadow:inset 0 0 80px rgba(0,0,0,0.5),0 0 0 3px rgba(255,118,117,0.24),0 0 40px rgba(0,0,0,0.8);}
+body.test-mode .header .subtitle{color:#ffb3ad;}
 @media(max-width:600px){.menu-meta{grid-template-columns:1fr;}}
 
 /* ── HEADER ── */
@@ -434,11 +440,16 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 .quick-action:hover{filter:brightness(1.08);}
 .quick-action:active{transform:scale(0.98);}
 .quick-action.firing{animation:quickTap 0.24s ease;}
+.quick-action.selected{box-shadow:0 0 0 2px rgba(240,208,128,0.8),0 0 24px rgba(240,208,128,0.2);}
 .quick-action.win{box-shadow:0 0 0 2px rgba(46,204,113,0.72),0 0 24px rgba(46,204,113,0.24);}
 .quick-action.loss{box-shadow:0 0 0 2px rgba(231,76,60,0.72),0 0 24px rgba(231,76,60,0.22);}
 .quick-action .subodds{font-size:12px;opacity:0.8;}
 .quick-action.hit{background:rgba(39,174,96,0.25);border-color:#27ae60;color:#66ff88;}
 .quick-action.out{background:rgba(192,57,43,0.25);border-color:#c0392b;color:#ff6b6b;}
+.quick-action.single{background:rgba(201,168,76,0.18);border-color:rgba(240,208,128,0.42);color:#ffe7a8;}
+.quick-action.double{background:rgba(52,152,219,0.2);border-color:rgba(116,185,255,0.46);color:#a9d8ff;}
+.quick-action.hr{background:rgba(255,107,0,0.24);border-color:rgba(255,107,0,0.52);color:#ffbf86;}
+.quick-action.full-span{grid-column:1/-1;}
 @keyframes quickTap{0%{transform:scale(1);}45%{transform:scale(0.95);}100%{transform:scale(1.02);}}
 .mode-event-card{display:none;}
 .mode-event-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
@@ -511,7 +522,6 @@ body[data-mode="quick"] .dice-hud,
 body[data-mode="quick"] .last-plays-card,
 body[data-mode="quick"] .auto-roll-bar,
 body[data-mode="quick"] #panel-quick .mode-note,
-body[data-mode="quick"] #panel-quick .bet-section,
 body[data-mode="quick"] #roll-payout-preview,
 body[data-mode="quick"] #streak-box-display{display:none!important;}
 .modal-backdrop{position:fixed;inset:0;background:rgba(2,4,3,0.78);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:18px;z-index:620;}
@@ -672,7 +682,10 @@ body[data-mode="quick"] #streak-box-display{display:none!important;}
         <div class="mode-desc">Generate a code, track both sides live, react between rolls, and race your opponent.</div>
       </div>
     </div>
-    <button class="utility-btn" id="power-dev-toggle" onclick="togglePowerHourOverride()">POWER DEV: OFF</button>
+    <div class="menu-override-row">
+      <button class="utility-btn danger" id="test-override-toggle" onclick="toggleTestOverride()">TEST OVERRIDE: OFF</button>
+      <div class="test-mode-flag" id="test-mode-flag-menu">TEST MODE ACTIVE</div>
+    </div>
     <button class="menu-feature" onclick="startGame('clutch')">
       <div class="eyebrow">BONUS MODE</div>
       <div class="title">Clutch Mode</div>
@@ -716,6 +729,7 @@ body[data-mode="quick"] #streak-box-display{display:none!important;}
     <div id="mode-badge" class="mode-badge quick">Quick Roll</div>
     <div class="gold-line"></div>
   </div>
+  <div class="test-mode-flag game-flag" id="test-mode-flag-game">TEST MODE ACTIVE</div>
 
   <div class="main-layout">
 
@@ -1157,31 +1171,24 @@ body[data-mode="quick"] #streak-box-display{display:none!important;}
         <!-- QUICK ROLL BETS -->
         <div class="bet-panel active" id="panel-quick" style="display:none">
           <div class="mode-note" style="color:rgba(231,76,60,0.8);margin-bottom:8px">1 roll.</div>
-          <div class="quick-grid">
-            <button class="quick-action hit" id="quick-bet-hit" onclick="quickBetAndRoll('hit','Bet Hit',1.5,this)">
-              ⚾ HIT<div class="subodds" id="quick-hit-odds">1.5x</div>
+          <div class="quick-grid compact" id="quick-roll-board">
+            <button class="quick-action hit" id="quick-bet-hit" data-quick-bet="hit" onclick="quickBetAndRoll('hit',this)">
+              ⚾ HIT<div class="subodds" id="quick-hit-odds">1:1</div>
             </button>
-            <button class="quick-action out" id="quick-bet-out" onclick="quickBetAndRoll('out','Bet Out',1.1,this)">
-              ✕ OUT<div class="subodds">1.1x</div>
+            <button class="quick-action out" id="quick-bet-out" data-quick-bet="out" onclick="quickBetAndRoll('out',this)">
+              ✕ OUT<div class="subodds" id="quick-out-odds">1:1</div>
+            </button>
+            <button class="quick-action single" id="quick-bet-single" data-quick-bet="single" onclick="quickBetAndRoll('single',this)">
+              1B SINGLE<div class="subodds" id="quick-single-odds">2:1</div>
+            </button>
+            <button class="quick-action double" id="quick-bet-double" data-quick-bet="double" onclick="quickBetAndRoll('double',this)">
+              2B DOUBLE<div class="subodds" id="quick-double-odds">4:1</div>
+            </button>
+            <button class="quick-action hr full-span" id="quick-bet-hr" data-quick-bet="hr" onclick="quickBetAndRoll('hr',this)">
+              ⚡ HOME RUN<div class="subodds" id="quick-hr-odds">20:1</div>
             </button>
           </div>
-          <div class="bankroll-health-note" id="quick-streak-note">Win 2 in a row for +10% odds. Win 3+ for +25%.</div>
-          <div class="bet-section">
-            <div class="bst">Exact Hit</div>
-            <div class="bet-options">
-              <button class="bet-btn" onclick="placeBet('single','Single',2.5)"><span>Single</span><span class="bo" id="odds-single">2.5x</span></button>
-              <button class="bet-btn" onclick="placeBet('double','Double',7)"><span>Double</span><span class="bo" id="odds-double">7x</span></button>
-              <button class="bet-btn" onclick="placeBet('hr','Home Run (6+6)',30)"><span>⚡ Home Run</span><span class="bo" id="odds-hr">30x</span></button>
-            </div>
-          </div>
-          <div class="bet-payout-preview" id="roll-payout-preview">
-            <div class="bet-payout-grid">
-              <div><div class="bpg-label">STAKE</div><div class="bpg-val" id="rpp-stake">$0</div></div>
-              <div><div class="bpg-label">ODDS</div><div class="bpg-val gold" id="rpp-odds">—</div></div>
-              <div><div class="bpg-label">TO WIN</div><div class="bpg-val green" id="rpp-win">$0</div></div>
-            </div>
-            <div class="bpg-profit" id="rpp-profit"></div>
-          </div>
+          <div class="bankroll-health-note" id="quick-streak-note">2W +10% · 3W +25%</div>
         </div>
 
         <div class="bet-panel" id="panel-clutch" style="display:none">
@@ -1910,7 +1917,8 @@ const POWER_HOUR_DURATION_MS = 60 * 60 * 1000;
 const JACKPOT_BASE = 250;
 const POWER_BOARD_KEY = 'dicebaseball_power_board_v2';
 const POWER_SESSION_KEY = 'dicebaseball_power_session_v1';
-const POWER_DEV_KEY = 'dicebaseball_power_dev_v1';
+const TEST_OVERRIDE_KEY = 'dicebaseball_test_override_v1';
+const LEGACY_POWER_DEV_KEY = 'dicebaseball_power_dev_v1';
 const DAILY_PROGRESS_KEY = 'dicebaseball_daily_progress_v2';
 const BET_HISTORY_KEY = 'dicebaseball_bet_history_v2';
 const GS_DAILY_KEY = 'dicebaseball_grandslam_daily_v2';
@@ -1918,6 +1926,20 @@ const GS_JACKPOT_KEY = 'dicebaseball_grandslam_jackpot_v2';
 const PARLAY_ROLL_TYPES = new Set(['hit','out','single','double','hr','grandslam']);
 const PARLAY_ROUND_TYPES = new Set(['anytime-single','anytime-double','anytime-hr','ou-over','ou-under']);
 const PARLAY_GAME_TYPES = new Set(['ml-p1','ml-p2','extra-innings','big-inning','runs-over','runs-under','hits-over','hits-under','p1-win-by2','p2-win-by2','p1-hr','p2-hr']);
+const quickRollPayouts = {
+  hit: 1,
+  out: 1,
+  single: 2,
+  double: 4,
+  homeRun: 20
+};
+const QUICK_ROLL_BETS = {
+  hit:    { label:'Hit',       payoutKey:'hit',      buttonId:'quick-bet-hit',    betType:'quick-hit' },
+  out:    { label:'Out',       payoutKey:'out',      buttonId:'quick-bet-out',    betType:'quick-out' },
+  single: { label:'Single',    payoutKey:'single',   buttonId:'quick-bet-single', betType:'single' },
+  double: { label:'Double',    payoutKey:'double',   buttonId:'quick-bet-double', betType:'double' },
+  hr:     { label:'Home Run',  payoutKey:'homeRun',  buttonId:'quick-bet-hr',     betType:'hr' }
+};
 
 const STATIC_NEXT_ODDS = (() => {
   let hit = 0, out = 0, hr = 0;
@@ -1967,6 +1989,46 @@ function formatMoney(value){
   const abs = Math.abs(Math.round(value));
   return `${value<0?'-':'+'}$${abs}`;
 }
+function isTestOverrideActive(){
+  return loadFlag(TEST_OVERRIDE_KEY) || loadFlag(LEGACY_POWER_DEV_KEY);
+}
+function setTestOverride(value){
+  saveFlag(TEST_OVERRIDE_KEY, value);
+  saveFlag(LEGACY_POWER_DEV_KEY, value);
+}
+function getQuickRollMeta(selection){
+  return QUICK_ROLL_BETS[selection] || null;
+}
+function getQuickRollDisplayOdds(selection){
+  const meta=getQuickRollMeta(selection);
+  return meta ? (quickRollPayouts[meta.payoutKey] || 1) : 1;
+}
+function getQuickRollBetOdds(selection){
+  return 1 + getQuickRollDisplayOdds(selection);
+}
+function getQuickRollButtonId(selection){
+  return getQuickRollMeta(selection)?.buttonId || '';
+}
+function formatQuickRollOddsLabel(selection){
+  const quickBoost = G.quickWinStreak>=3 ? 1.25 : G.quickWinStreak>=2 ? 1.10 : 1;
+  const boosted = getQuickRollDisplayOdds(selection) * quickBoost;
+  const rounded = boosted % 1 === 0 ? boosted.toFixed(0) : boosted.toFixed(2).replace(/0$/,'').replace(/\.$/,'');
+  return `${rounded}:1`;
+}
+function renderQuickRollOdds(){
+  setText('quick-hit-odds', formatQuickRollOddsLabel('hit'));
+  setText('quick-out-odds', formatQuickRollOddsLabel('out'));
+  setText('quick-single-odds', formatQuickRollOddsLabel('single'));
+  setText('quick-double-odds', formatQuickRollOddsLabel('double'));
+  setText('quick-hr-odds', formatQuickRollOddsLabel('hr'));
+}
+function didQuickRollBetWin(selection, outcome){
+  const meta=getQuickRollMeta(selection);
+  if(!meta) return false;
+  if(meta.betType==='quick-hit') return ['single','double','hr'].includes(outcome.type);
+  if(meta.betType==='quick-out') return outcome.cat==='out';
+  return evaluateRollParlayLeg({type:meta.betType}, outcome, 0);
+}
 function defaultSession(){
   return { startBankroll:START_BANKROLL, bestStreak:0, biggestWin:0, profit:0, rounds:0, shown:false };
 }
@@ -1996,7 +2058,7 @@ function saveDailyProgress(data){ saveStore(DAILY_PROGRESS_KEY,data); }
 function getBetHistory(){ return loadStore(BET_HISTORY_KEY,[]); }
 function saveBetHistory(history){ saveStore(BET_HISTORY_KEY,history.slice(0,25)); }
 function getPowerHourInfo(now=new Date()){
-  if(loadFlag(POWER_DEV_KEY)){
+  if(isTestOverrideActive()){
     return { active:true, override:true, start:now, end:new Date(now.getTime()+POWER_HOUR_DURATION_MS), msLeft:POWER_HOUR_DURATION_MS };
   }
   const start=new Date(now);
@@ -2061,17 +2123,24 @@ function showReaction(emoji){
   setTimeout(()=>toast.classList.remove('show'),1000);
 }
 function updatePowerDevToggle(){
-  const btn=document.getElementById('power-dev-toggle');
-  if(!btn) return;
-  btn.textContent = `POWER DEV: ${loadFlag(POWER_DEV_KEY)?'ON':'OFF'}`;
+  const active=isTestOverrideActive();
+  const btn=document.getElementById('test-override-toggle');
+  if(btn) btn.textContent = `TEST OVERRIDE: ${active?'ON':'OFF'}`;
+  document.body.classList.toggle('test-mode', active);
+  ['test-mode-flag-menu','test-mode-flag-game'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.classList.toggle('active', active);
+  });
 }
 function togglePowerHourOverride(){
-  const next=!loadFlag(POWER_DEV_KEY);
-  saveFlag(POWER_DEV_KEY, next);
-  savePowerSession({date:localDateKey(),completed:false,score:null});
+  toggleTestOverride();
+}
+function toggleTestOverride(){
+  const next=!isTestOverrideActive();
+  setTestOverride(next);
   updatePowerDevToggle();
   updateModeEventCards();
-  showPayoutFlash(next ? 'POWER DEV ON' : 'POWER DEV OFF', next);
+  showPayoutFlash(next ? 'TEST MODE ACTIVE' : 'TEST MODE OFF', next);
 }
 function toggleStatsScreen(){
   const screen=document.getElementById('stats-screen');
@@ -2084,10 +2153,7 @@ function toggleStatsScreen(){
   renderStatsScreen();
 }
 function clearQuickActionState(){
-  ['quick-bet-hit','quick-bet-out'].forEach(id=>{
-    const btn=document.getElementById(id);
-    if(btn) btn.classList.remove('firing','win','loss');
-  });
+  document.querySelectorAll('[data-quick-bet]').forEach(btn=>btn.classList.remove('firing','selected','win','loss'));
 }
 function describeBases(){
   const spots=[];
@@ -2477,27 +2543,28 @@ function updateModeEventCards(){
   const gsCard=document.getElementById('grandslam-event-card');
   if(powerCard) powerCard.style.display = G.mode==='power' ? 'block' : 'none';
   if(gsCard) gsCard.style.display = G.mode==='grandslam' ? 'block' : 'none';
+  const testOverride=isTestOverrideActive();
   const powerInfo=getPowerHourInfo();
   const powerSession=getPowerSession();
-  setText('power-countdown', powerInfo.override ? 'DEV' : formatCountdown(powerInfo.msLeft));
-  setText('power-event-status', powerSession.completed ? 'DONE' : powerInfo.override ? 'DEV' : powerInfo.active ? 'LIVE' : 'LOCKED');
+  setText('power-countdown', powerInfo.override ? 'TEST' : formatCountdown(powerInfo.msLeft));
+  setText('power-event-status', testOverride ? 'TEST' : powerSession.completed ? 'DONE' : powerInfo.active ? 'LIVE' : 'LOCKED');
   const board=getPowerBoard().entries.sort((a,b)=>b.score-a.score).slice(0,10);
   const topScore=board[0]?.score || 0;
   setText('power-top-score', topScore);
   const playerRank=board.findIndex(entry=>entry.me);
   setText('power-rank', playerRank>=0 ? `#${playerRank+1}` : '#--');
-  setText('power-reward-copy', powerSession.completed ? `Today's 9-roll run is locked at ${powerSession.score||0} runs.` : powerInfo.override ? 'Dev override is active. You can test the 9-roll event right now.' : powerInfo.active ? '9 rolls. Post the best score you can.' : `Next session opens in ${formatCountdown(powerInfo.msLeft)}.`);
+  setText('power-reward-copy', testOverride ? 'Test override is on. Start a fresh 9-roll run any time.' : powerSession.completed ? `Today's 9-roll run is locked at ${powerSession.score||0} runs.` : powerInfo.active ? '9 rolls. Post the best score you can.' : `Next session opens in ${formatCountdown(powerInfo.msLeft)}.`);
   const powerModeCard=document.getElementById('power-mode-card');
   const powerModeTag=document.getElementById('power-mode-tag');
   const powerModeDesc=document.getElementById('power-mode-desc');
-  const powerLocked=!powerInfo.active || powerSession.completed;
+  const powerLocked=testOverride ? false : !powerInfo.active || powerSession.completed;
   if(powerModeCard) powerModeCard.classList.toggle('locked', powerLocked);
-  if(powerModeTag) powerModeTag.textContent = powerSession.completed ? 'DONE' : powerInfo.override ? 'DEV LIVE' : powerInfo.active ? 'LIVE EVENT' : 'LOCKED';
+  if(powerModeTag) powerModeTag.textContent = testOverride ? 'TEST' : powerSession.completed ? 'DONE' : powerInfo.active ? 'LIVE EVENT' : 'LOCKED';
   if(powerModeDesc){
-    powerModeDesc.textContent = powerSession.completed
+    powerModeDesc.textContent = testOverride
+      ? 'Test override is on. Launch Power Hour any time with 9 fresh rolls.'
+      : powerSession.completed
       ? `Today's Power Hour is complete. Final score: ${powerSession.score||0} runs.`
-      : powerInfo.override
-        ? 'Dev override is on. Test the event outside the live hour.'
       : powerInfo.active
         ? 'Live now. You get exactly 9 rolls to post your score to the board.'
         : `Locked until the next window. Countdown: ${formatCountdown(powerInfo.msLeft)}.`;
@@ -2510,12 +2577,12 @@ function updateModeEventCards(){
   const jackpot=getGrandSlamJackpot();
   const gsDaily=getGrandSlamDaily();
   setText('grandslam-jackpot', `$${jackpot.amount}`);
-  setText('gs-daily-status', gsDaily.played ? 'USED' : 'READY');
+  setText('gs-daily-status', testOverride ? 'TEST' : gsDaily.played ? 'USED' : 'READY');
   const tomorrow=new Date();
   tomorrow.setHours(24,0,0,0);
   setText('gs-reset-time', formatCountdown(tomorrow - new Date()));
   setText('gs-bonus-prize', '$50');
-  setText('gs-event-copy', gsDaily.played ? 'You already took today’s swing. Jackpot rolls into tomorrow if nobody hits it.' : 'One shot today. Miss and the jackpot grows. Hit and the bonus prize lands too.');
+  setText('gs-event-copy', testOverride ? 'Test override is on. Daily lock is off for Grand Slam.' : gsDaily.played ? 'You already took today’s swing. Jackpot rolls into tomorrow if nobody hits it.' : 'One shot today. Miss and the jackpot grows. Hit and the bonus prize lands too.');
   updatePowerDevToggle();
 }
 function markSessionProgress(winAmount=0){
@@ -2625,6 +2692,7 @@ function showModeScreen(){
   renderBetHistory();
   updateModeEventCards();
   renderStaticOdds();
+  renderQuickRollOdds();
   refreshBettingAvailability();
   if(G.bankroll<=0 && (G.session.rounds||0)>0 && !G.session.shown){
     G.session.shown=true;
@@ -2633,14 +2701,15 @@ function showModeScreen(){
 }
 
 function startGame(mode){
+  const testOverride=isTestOverrideActive();
   const powerInfo=getPowerHourInfo();
   const powerSession=getPowerSession();
-  if(mode==='power' && !powerInfo.active){
+  if(mode==='power' && !powerInfo.active && !testOverride){
     updateModeEventCards();
     showPayoutFlash(`POWER HOUR ${POWER_HOUR_START_HOUR}:00`, false);
     return;
   }
-  if(mode==='power' && powerSession.completed){
+  if(mode==='power' && powerSession.completed && !testOverride){
     updateModeEventCards();
     showPayoutFlash('POWER HOUR COMPLETE', false);
     return;
@@ -2775,9 +2844,9 @@ function startGame(mode){
   document.getElementById('sv-roll').textContent='—';
   document.getElementById('lbl1').textContent='—';
   document.getElementById('lbl2').textContent='—';
-  document.getElementById('roll-result').textContent=mode==='quick'?'Tap HIT or OUT.':mode==='clutch'?'Pressure spot.':'Place your bets & roll!';
+  document.getElementById('roll-result').textContent=mode==='quick'?'Tap a bet to roll.':mode==='clutch'?'Pressure spot.':'Place your bets & roll!';
   document.getElementById('roll-result').className='roll-result';
-  setText('roll-status-line', mode==='quick'?'One tap bets and rolls.':mode==='power'?'Live now. 9 rolls only.':mode==='grandslam'?'Jackpot is live.':mode==='clutch'?'Pressure counts are loaded.':'Bet, then roll.');
+  setText('roll-status-line', mode==='quick'?'Pick a bet. Roll fires instantly.':mode==='power'?(testOverride?'Test run ready. 9 rolls fresh.':'Live now. 9 rolls only.'):mode==='grandslam'?(testOverride?'Test mode: daily lock off.':'Jackpot is live.'):mode==='clutch'?'Pressure counts are loaded.':'Bet, then roll.');
   document.getElementById('btn-roll').textContent = 'ROLL';
   document.getElementById('btn-roll').disabled=false;
   document.getElementById('btn-next-roll').classList.remove('visible');
@@ -2793,7 +2862,7 @@ function startGame(mode){
   const betSummarySection=document.getElementById('bet-summary-section');
   if(betSummarySection) betSummarySection.style.display = mode==='quick' ? 'none' : 'block';
 
-  if(mode==='grandslam' && getGrandSlamDaily().played){
+  if(mode==='grandslam' && getGrandSlamDaily().played && !testOverride){
     G.gameOver=true;
     document.getElementById('btn-roll').disabled=true;
     document.getElementById('roll-result').textContent='Grand Slam already used today. Jackpot rolls to tomorrow.';
@@ -2801,6 +2870,7 @@ function startGame(mode){
   }
 
   renderStaticOdds();
+  renderQuickRollOdds();
   renderRecentPlays();
   renderHeatMeter();
   updateStreakDisplay();
@@ -2830,12 +2900,13 @@ function rollDice(){
     return;
   }
   if(G.mode==='power'){
+    const testOverride=isTestOverrideActive();
     const powerInfo=getPowerHourInfo();
     const powerSession=getPowerSession();
-    if(!powerInfo.active || powerSession.completed || G.powerRollsLeft<=0){
+    if(((!powerInfo.active || powerSession.completed) && !testOverride) || G.powerRollsLeft<=0){
       G.gameOver=true;
       document.getElementById('btn-roll').disabled=true;
-      setText('roll-status-line', powerSession.completed ? 'Today’s Power Hour run is already complete.' : 'Power Hour is closed until the next session.');
+      setText('roll-status-line', testOverride ? 'Start a new test Power Hour run.' : powerSession.completed ? 'Today’s Power Hour run is already complete.' : 'Power Hour is closed until the next session.');
       updateModeEventCards();
       return;
     }
@@ -2883,6 +2954,9 @@ function finishRoll(){
 // ═══════════════════════════════════════════
 function processPlay(outcome,v1,v2){
   const re=document.getElementById('roll-result');
+  const testOverride=isTestOverrideActive();
+  const liveQuickBet=G.mode==='quick' ? G.bets.find(b=>!b.betKind) : null;
+  const quickBetSnapshot=liveQuickBet ? {...liveQuickBet} : null;
   let runs=0, logClass='', logText='';
 
   if(outcome.type==='out'){
@@ -3007,28 +3081,32 @@ function processPlay(outcome,v1,v2){
     document.getElementById('roll-result').textContent=gsMsg;
     document.getElementById('roll-result').className=outcome.type==='hr'?'roll-result homerun':'roll-result';
     if(outcome.type==='hr') showHRBanner(true);
-    const daily=getGrandSlamDaily();
-    daily.played=true;
-    saveGrandSlamDaily(daily);
     const jackpot=getGrandSlamJackpot();
+    if(!testOverride){
+      const daily=getGrandSlamDaily();
+      daily.played=true;
+      saveGrandSlamDaily(daily);
+    }
     if(outcome.type==='hr'){
       const bonus=jackpot.amount+50;
       G.bankroll+=bonus;
-      showPayoutFlash(`JACKPOT +$${bonus}`, true);
-      saveGrandSlamJackpot({ amount:JACKPOT_BASE, lastWin:localDateKey() });
+      showPayoutFlash(`${testOverride?'TEST ':''}JACKPOT +$${bonus}`, true);
+      if(!testOverride) saveGrandSlamJackpot({ amount:JACKPOT_BASE, lastWin:localDateKey() });
       showConfetti();
-    } else {
+    } else if(!testOverride) {
       saveGrandSlamJackpot({ amount:jackpot.amount+25, lastWin:jackpot.lastWin||null });
     }
     recordRoundEnd('grandslam', runs, 0);
     setTimeout(()=>{
-      G.runs=0; G.gameOver=true; G.bets=[];
+      G.runs=0; G.bets=[];
       G.bases=[true,true,true]; updateBases();
-      document.getElementById('roll-result').textContent='Grand Slam used today. Jackpot updates again tomorrow.';
+      document.getElementById('roll-result').textContent=testOverride ? 'Test mode: Grand Slam is ready again.' : 'Grand Slam used today. Jackpot updates again tomorrow.';
       document.getElementById('roll-result').className='roll-result';
       document.querySelectorAll('.outcome-row').forEach(r=>r.classList.remove('active-roll'));
       renderActiveBets();
-      document.getElementById('btn-roll').disabled=true;
+      G.gameOver=!testOverride;
+      document.getElementById('btn-roll').disabled=!testOverride;
+      setText('roll-status-line', testOverride ? 'Test mode is active. Roll Grand Slam again any time.' : 'Come back after the daily reset for the next shot.');
       updateModeEventCards();
       refreshBettingAvailability();
     },2000);
@@ -3049,7 +3127,7 @@ function processPlay(outcome,v1,v2){
       board.entries.push({ me:true, score:G.powerTotalRuns, ts:Date.now() });
       board.entries.sort((a,b)=>b.score-a.score || a.ts-b.ts);
       savePowerBoard(board);
-      savePowerSession({date:localDateKey(),completed:true,score:G.powerTotalRuns});
+      if(!testOverride) savePowerSession({date:localDateKey(),completed:true,score:G.powerTotalRuns});
       const rank=board.entries.findIndex(entry=>entry.me)+1;
       if(!G.powerRewardGiven){
         if(rank===1){ G.bankroll+=100; showPayoutFlash('POWER HOUR 1ST +$100', true); }
@@ -3057,12 +3135,12 @@ function processPlay(outcome,v1,v2){
         G.powerRewardGiven=true;
       }
       updateModeEventCards();
-      const msg=`Power Hour done! ${G.powerTotalRuns} run${G.powerTotalRuns!==1?'s':''} scored`;
+      const msg=`${testOverride?'Power Hour test':'Power Hour'} done! ${G.powerTotalRuns} run${G.powerTotalRuns!==1?'s':''} scored`;
       document.getElementById('roll-result').textContent=msg;
       if(G.powerTotalRuns>=3) showConfetti();
       G.gameOver=true;
       document.getElementById('btn-roll').disabled=true;
-      setText('roll-status-line','Leaderboard updated. Your 9-roll Power Hour session is complete.');
+      setText('roll-status-line', testOverride ? 'Test run complete. Start Power Hour again any time.' : 'Leaderboard updated. Your 9-roll Power Hour session is complete.');
       updateBankrollDisplay();
       refreshBettingAvailability();
     } else {
@@ -3091,29 +3169,39 @@ function processPlay(outcome,v1,v2){
   }
 
   if(G.mode==='quick'){
-    const quickWon = G.quickSelection ? ((G.quickSelection==='hit' && outcome.cat==='hit') || (G.quickSelection==='out' && outcome.cat==='out')) : null;
+    const quickWon = G.quickSelection ? didQuickRollBetWin(G.quickSelection, outcome) : null;
     if(G.quickSelection){
-      const btn=document.getElementById(G.quickSelection==='hit' ? 'quick-bet-hit' : 'quick-bet-out');
+      const btn=document.getElementById(getQuickRollButtonId(G.quickSelection));
       if(btn) btn.classList.add(quickWon ? 'win' : 'loss');
     }
+    const quickNextStreak = quickWon ? G.quickWinStreak + 1 : 0;
+    const quickWinMult = quickWon ? (quickNextStreak>=3 ? 1.25 : quickNextStreak>=2 ? 1.10 : 1) : 1;
+    const quickPayout = quickWon && quickBetSnapshot ? Math.round(quickBetSnapshot.amount * quickBetSnapshot.odds * quickWinMult) : 0;
+    if(quickBetSnapshot){
+      setText('roll-status-line', quickWon ? `${getQuickRollMeta(G.quickSelection)?.label || 'Bet'} paid $${quickPayout}.` : `${getQuickRollMeta(G.quickSelection)?.label || 'Bet'} lost $${quickBetSnapshot.amount}.`);
+      showResultBanner(outcome.type==='hr'?'HOME RUN':outcome.name.toUpperCase(), quickWon ? `Paid $${quickPayout}.` : `Lost $${quickBetSnapshot.amount}.`);
+      const quickNote=document.getElementById('quick-streak-note');
+      if(quickNote) quickNote.textContent = quickWon ? `WIN $${quickPayout} · ${quickNextStreak>=3?'+25% live':quickNextStreak>=2?'+10% live':'next win starts bonus'}` : `LOSS -$${quickBetSnapshot.amount} · streak reset`;
+      if(!quickWon) showPayoutFlash(`-$${quickBetSnapshot.amount}`, false);
+    }
     // Auto-reset after every roll — no game over screen
-    if(outcome.cat==='out'){
-      G.quickWinStreak=0;
-      recordQuickRoll(false);
-      recordRoundEnd('quick', G.runs, G.hitStreak);
-    } else {
+    if(quickWon){
       G.quickWinStreak++;
       updateChallengeProgress('quick-win',{streak:G.quickWinStreak});
       recordRoundEnd('quick', G.runs, G.hitStreak);
       recordQuickRoll(true);
+    } else {
+      G.quickWinStreak=0;
+      recordQuickRoll(false);
+      recordRoundEnd('quick', G.runs, G.hitStreak);
     }
-    const quickStreakCopy = G.quickWinStreak>=3 ? 'Quick Roll heater: +25% applied on wins at 3+ straight.' : G.quickWinStreak>=2 ? 'Quick Roll heater: +10% applied after 2 straight wins.' : 'One more quick win starts the multiplier ladder.';
+    const quickStreakCopy = G.quickWinStreak>=3 ? '2W +10% · 3W +25% LIVE' : G.quickWinStreak>=2 ? '2W +10% LIVE · 3W +25%' : '2W +10% · 3W +25%';
     setTimeout(()=>{
       clearQuickActionState();
       G.quickSelection=null;
       G.bets=[]; G.runs=0; G.gameOver=false;
       document.getElementById('sv-runs').textContent='0';
-      document.getElementById('roll-result').textContent='Tap HIT or OUT to fire the next Quick Roll.';
+      document.getElementById('roll-result').textContent='Tap a bet to roll.';
       document.getElementById('roll-result').className='roll-result';
       document.getElementById('sv-roll').textContent='—';
       document.getElementById('lbl1').textContent='—';
@@ -3282,6 +3370,8 @@ function settlePerRollBets(outcome,runs){
     let win=false;
     if(b.type==='hit'     &&outcome.cat==='hit')    win=true;
     if(b.type==='out'     &&outcome.cat==='out')    win=true;
+    if(b.type==='quick-hit' && ['single','double','hr'].includes(outcome.type)) win=true;
+    if(b.type==='quick-out' && outcome.cat==='out') win=true;
     if(b.type==='single'  &&outcome.type==='single')win=true;
     if(b.type==='double'  &&outcome.type==='double')win=true;
 
@@ -3505,17 +3595,31 @@ function placeBet(type,label,baseOdds){
   updateRollPayoutPreview(odds);
   return true;
 }
-function quickBetAndRoll(type,label,baseOdds,btn){
+function placeQuickBet(selection){
+  if(G.gameOver){ showPayoutFlash('GAME OVER',false); return false; }
+  const meta=getQuickRollMeta(selection);
+  if(!meta) return false;
+  if(!ensureStakeAvailable(G.chipValue)) return false;
+  G.bets=[{type:meta.betType,label:meta.label,odds:getQuickRollBetOdds(selection),amount:G.chipValue}];
+  G.bankroll-=G.chipValue;
+  updateBankrollDisplay();
+  renderActiveBets();
+  return true;
+}
+function quickBetAndRoll(type,btn){
   if(G.mode!=='quick') return;
   if(G.rolling || G.gameOver) return;
   clearQuickActionState();
   if(btn){
+    btn.classList.add('selected');
     btn.classList.add('firing');
     setTimeout(()=>btn.classList.remove('firing'), 220);
   }
-  const placed=placeBet(type,label,baseOdds);
+  const placed=placeQuickBet(type);
   if(!placed) return;
   G.quickSelection=type;
+  const quickNote=document.getElementById('quick-streak-note');
+  if(quickNote) quickNote.textContent = `${getQuickRollMeta(type)?.label || 'Bet'} locked · ${formatQuickRollOddsLabel(type)}`;
   setTimeout(()=>{
     if(!G.rolling) rollDice();
   }, 120);
@@ -3757,8 +3861,7 @@ function updateStreakOdds(){
   });
   const ind=document.getElementById('streak-hit-indicator');
   if(ind) ind.textContent=hot?'🔥':'';
-  const quickBoost = G.quickWinStreak>=3 ? 1.25 : G.quickWinStreak>=2 ? 1.10 : 1;
-  setText('quick-hit-odds', `${(1.5*quickBoost).toFixed(2)}x`);
+  renderQuickRollOdds();
 }
 
 // ═══════════════════════════════════════════
