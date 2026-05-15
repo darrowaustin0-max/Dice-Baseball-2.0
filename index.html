@@ -46,6 +46,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 .mode-card:hover{border-color:rgba(240,208,128,0.7);transform:translateY(-2px);box-shadow:0 22px 38px rgba(0,0,0,0.45),0 0 30px rgba(201,168,76,0.12);}
 .mode-card:active{transform:scale(0.985);box-shadow:0 0 0 rgba(0,0,0,0.25),0 0 26px rgba(240,208,128,0.26);}
 .mode-card.selected{border-color:var(--gold-light);box-shadow:0 0 24px rgba(201,168,76,0.38);}
+.mode-card.locked{opacity:0.46;filter:saturate(0.72);pointer-events:none;}
 .mode-icon{position:absolute;left:18px;top:50%;transform:translateY(-50%);width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:30px;border-radius:14px;background:rgba(201,168,76,0.12);box-shadow:inset 0 1px 0 rgba(255,255,255,0.05);}
 .mode-name{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;color:var(--gold-light);margin-bottom:5px;line-height:1;}
 .mode-desc{font-family:'Oswald',sans-serif;font-size:13px;color:rgba(245,230,200,0.75);line-height:1.45;max-width:96%;}
@@ -110,7 +111,11 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 .gold-line::before{content:'⬥';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);color:var(--gold);font-size:11px;background:var(--felt);padding:0 8px;}
 
 /* ── LAYOUT ── */
-.main-layout{display:grid;grid-template-columns:260px 1fr 290px;gap:12px;position:relative;z-index:2;max-width:1380px;margin:0 auto;}
+.main-layout{display:flex;flex-direction:column;gap:12px;position:relative;z-index:2;max-width:900px;margin:0 auto;}
+.panel-game{order:1;}
+.panel-bets{order:2;}
+.center-col{order:3;}
+.panel-game,.center-col,.panel-bets{width:100%;}
 
 /* ── PANELS ── */
 .panel{background:var(--felt-dark);border:1px solid var(--gold-dark);border-radius:4px;padding:12px;box-shadow:inset 0 0 20px rgba(0,0,0,0.3),0 4px 12px rgba(0,0,0,0.4);}
@@ -203,8 +208,8 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 /* ── CENTER ── */
 .center-col{display:flex;flex-direction:column;gap:10px;}
 /* Inline game status — lives above the dice in center col */
-.inline-status{background:var(--felt-dark);border:1px solid var(--gold-dark);border-radius:6px;padding:10px 12px;display:none;}
-.inline-status.visible{display:block;}
+.inline-status{background:var(--felt-dark);border:1px solid var(--gold-dark);border-radius:6px;padding:10px 12px;display:none!important;}
+.inline-status.visible{display:none!important;}
 .inline-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:8px;}
 .inline-field-wrap{position:relative;width:100px;height:100px;flex-shrink:0;}
 .inline-field-grass{position:absolute;inset:0;background:radial-gradient(ellipse at center,#1a4a1a 0%,#0f2f0f 100%);border-radius:4px;border:1px solid rgba(201,168,76,0.15);}
@@ -349,8 +354,10 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 /* Payout log */
 .payout-log{background:#080f08;border:1px solid var(--gold-dark);border-radius:3px;padding:5px;max-height:80px;overflow-y:auto;font-family:'Special Elite',cursive;font-size:10px;color:rgba(245,230,200,0.7);line-height:1.5;}
 .payout-log::-webkit-scrollbar{width:3px;}.payout-log::-webkit-scrollbar-thumb{background:var(--gold-dark);}
-.btn-menu{position:fixed;top:12px;right:16px;z-index:400;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;padding:7px 14px;background:rgba(0,0,0,0.7);border:1px solid var(--gold-dark);color:var(--gold);border-radius:4px;cursor:pointer;transition:all 0.2s;backdrop-filter:blur(4px);}
-.btn-menu:hover{background:rgba(201,168,76,0.2);border-color:var(--gold);}
+.btn-menu,.btn-stats{position:fixed;top:12px;z-index:470;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;padding:7px 14px;background:rgba(0,0,0,0.7);border:1px solid var(--gold-dark);color:var(--gold);border-radius:4px;cursor:pointer;transition:all 0.2s;backdrop-filter:blur(4px);}
+.btn-menu{right:16px;}
+.btn-stats{left:16px;}
+.btn-menu:hover,.btn-stats:hover{background:rgba(201,168,76,0.2);border-color:var(--gold);}
 .bet-payout-preview{background:rgba(0,0,0,0.4);border:1px solid rgba(201,168,76,0.2);border-radius:3px;padding:6px;margin-bottom:6px;display:none;}
 .bet-payout-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;text-align:center;}
 .bpg-label{font-size:9px;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;color:rgba(201,168,76,0.5);}
@@ -411,15 +418,27 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 .quick-action{padding:14px 8px;border-radius:10px;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;transition:transform 0.14s ease,filter 0.14s ease,background 0.14s ease;border:2px solid transparent;}
 .quick-action:hover{filter:brightness(1.08);}
 .quick-action:active{transform:scale(0.98);}
+.quick-action.firing{animation:quickTap 0.24s ease;}
+.quick-action.win{box-shadow:0 0 0 2px rgba(46,204,113,0.72),0 0 24px rgba(46,204,113,0.24);}
+.quick-action.loss{box-shadow:0 0 0 2px rgba(231,76,60,0.72),0 0 24px rgba(231,76,60,0.22);}
 .quick-action .subodds{font-size:12px;opacity:0.8;}
 .quick-action.hit{background:rgba(39,174,96,0.25);border-color:#27ae60;color:#66ff88;}
 .quick-action.out{background:rgba(192,57,43,0.25);border-color:#c0392b;color:#ff6b6b;}
+@keyframes quickTap{0%{transform:scale(1);}45%{transform:scale(0.95);}100%{transform:scale(1.02);}}
 .mode-event-card{display:none;}
 .mode-event-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
 .mode-event-stat{text-align:center;padding:8px 6px;border-radius:10px;background:rgba(255,255,255,0.03);}
 .mode-event-stat .label{font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:1px;color:rgba(201,168,76,0.45);}
 .mode-event-stat .value{font-family:'Bebas Neue',sans-serif;font-size:21px;color:var(--gold-light);}
 .event-copy{font-family:'Special Elite',cursive;font-size:10px;color:rgba(245,230,200,0.62);line-height:1.5;margin-top:7px;}
+.leaderboard-shell{margin-top:10px;padding:10px;border-radius:12px;background:rgba(0,0,0,0.22);border:1px solid rgba(201,168,76,0.14);}
+.leaderboard-title{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(201,168,76,0.58);margin-bottom:8px;}
+.leaderboard-list{display:flex;flex-direction:column;gap:6px;}
+.leaderboard-row{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;padding:7px 8px;border-radius:10px;background:rgba(255,255,255,0.03);font-size:11px;}
+.leaderboard-row.me{border:1px solid rgba(116,185,255,0.34);background:rgba(116,185,255,0.08);}
+.leaderboard-rank{font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--gold-light);}
+.leaderboard-name{font-family:'Oswald',sans-serif;color:var(--cream);}
+.leaderboard-score{font-family:'Bebas Neue',sans-serif;font-size:18px;color:#66ff88;}
 .inning-scoreboard{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:10px;}
 .inning-score-cell{background:rgba(0,0,0,0.26);border:1px solid rgba(201,168,76,0.16);border-radius:10px;padding:8px 6px;text-align:center;}
 .inning-score-cell .label{font-family:'Bebas Neue',sans-serif;font-size:10px;letter-spacing:2px;color:rgba(201,168,76,0.48);}
@@ -439,7 +458,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 .parlay-meta-item .value{font-family:'Bebas Neue',sans-serif;font-size:16px;color:var(--cream);}
 .parlay-row{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center;padding:8px 10px;border-radius:10px;margin-bottom:6px;border:1px solid rgba(201,168,76,0.12);opacity:0;transform:translateY(8px);animation:parlayReveal 0.35s ease forwards;}
 .parlay-row:last-child{margin-bottom:0;}
-.parlay-row.pending{background:rgba(241,196,15,0.08);border-color:rgba(241,196,15,0.25);}
+.parlay-row.pending,.parlay-row.ready{background:rgba(52,152,219,0.08);border-color:rgba(52,152,219,0.2);}
 .parlay-row.win{background:rgba(46,204,113,0.12);border-color:rgba(46,204,113,0.38);}
 .parlay-row.loss{background:rgba(231,76,60,0.12);border-color:rgba(231,76,60,0.36);}
 .parlay-row.closest{box-shadow:0 0 0 1px rgba(255,107,0,0.5),0 0 18px rgba(255,107,0,0.16);}
@@ -469,6 +488,10 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 .reaction-btn:hover{transform:translateY(-1px);border-color:rgba(240,208,128,0.55);}
 .reaction-toast{position:fixed;top:88px;left:50%;transform:translateX(-50%) translateY(-12px);opacity:0;pointer-events:none;background:rgba(6,10,6,0.95);border:1px solid rgba(201,168,76,0.26);border-radius:999px;padding:10px 16px;z-index:420;font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:1px;transition:opacity 0.25s ease,transform 0.25s ease;}
 .reaction-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.result-banner{position:fixed;top:122px;left:50%;transform:translateX(-50%) translateY(-12px) scale(0.97);opacity:0;pointer-events:none;z-index:430;min-width:min(92vw,480px);padding:14px 18px;border-radius:16px;background:linear-gradient(180deg,rgba(8,15,9,0.96),rgba(4,8,5,0.97));border:1px solid rgba(201,168,76,0.3);box-shadow:0 18px 48px rgba(0,0,0,0.45);transition:opacity 0.22s ease,transform 0.22s ease;}
+.result-banner.show{opacity:1;transform:translateX(-50%) translateY(0) scale(1);}
+.result-banner .title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:3px;color:var(--gold-light);line-height:1;}
+.result-banner .copy{font-family:'Special Elite',cursive;font-size:11px;color:rgba(245,230,200,0.72);line-height:1.6;margin-top:5px;}
 .modal-backdrop{position:fixed;inset:0;background:rgba(2,4,3,0.78);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:18px;z-index:620;}
 .modal-backdrop.show{display:flex;}
 .modal-card{width:min(100%,420px);background:linear-gradient(180deg,rgba(16,24,17,0.98),rgba(5,8,5,0.98));border:1px solid rgba(201,168,76,0.28);border-radius:18px;padding:20px;box-shadow:0 26px 60px rgba(0,0,0,0.5);}
@@ -493,6 +516,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
   .odds-strip,.mode-event-grid,.summary-grid,.stats-subgrid{grid-template-columns:1fr;}
   .mode-card{padding-left:68px;}
   .mode-name{font-size:25px;}
+  .btn-menu,.btn-stats{top:10px;padding:6px 12px;font-size:12px;}
 }
 
 /* Overlays */
@@ -565,16 +589,13 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 .tab-btn .ti{font-size:17px;line-height:1;}
 .tab-btn.active{color:var(--gold-light);}
 
-@media(max-width:1050px){.main-layout{grid-template-columns:230px 1fr 260px;}}
-@media(max-width:850px){.main-layout{grid-template-columns:1fr;}}
 @media(max-width:700px){
-  body{padding-bottom:62px;}
+  body{padding-bottom:12px;}
   .table{padding:8px;border-width:6px;}
   .header h1{font-size:32px;letter-spacing:4px;}
   .main-layout{gap:8px;}
-  .panel-game,.panel-field,.panel-bets{display:none;}
-  .panel-game.active,.panel-field.active,.panel-bets.active{display:block;}
-  .mobile-tabs{display:grid;}
+  .panel-game,.panel-field,.panel-bets{display:block;}
+  .mobile-tabs{display:none!important;}
   .die{width:60px;height:60px;}
   .btn-roll{font-size:20px;padding:10px 28px;}
   .dice-table{min-height:150px;padding:12px;}
@@ -610,11 +631,11 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
         <div class="mode-name">Quick Roll</div>
         <div class="mode-desc">One roll, instant sweat. Stack a streak bonus and keep the pace moving.</div>
       </div>
-      <div class="mode-card" onclick="startGame('power')">
-        <div class="mode-tag" style="background:rgba(52,152,219,0.2);color:#74b9ff;border-color:rgba(52,152,219,0.35)">LIVE EVENT</div>
+      <div class="mode-card" id="power-mode-card" onclick="startGame('power')">
+        <div class="mode-tag" id="power-mode-tag" style="background:rgba(52,152,219,0.2);color:#74b9ff;border-color:rgba(52,152,219,0.35)">LIVE EVENT</div>
         <div class="mode-icon">🔥</div>
         <div class="mode-name">Power Hour</div>
-        <div class="mode-desc">Nine rolls inside the daily event window. Climb the board, chase rewards, stay alive.</div>
+        <div class="mode-desc" id="power-mode-desc">Nine rolls inside the daily event window. Climb the board, chase rewards, stay alive.</div>
       </div>
       <div class="mode-card" onclick="startGame('grandslam')">
         <div class="mode-tag" style="background:rgba(241,196,15,0.18);color:#ffeaa7;border-color:rgba(241,196,15,0.35)">JACKPOT</div>
@@ -1019,6 +1040,16 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
             </div>
           </div>
           <div class="event-copy" id="power-reward-copy">1st earns the top bonus bet. Top quarter of the field still cashes smaller rewards.</div>
+          <div class="leaderboard-shell">
+            <div class="leaderboard-title">Live Leaderboard</div>
+            <div class="leaderboard-list" id="power-leaderboard-list">
+              <div class="leaderboard-row">
+                <div class="leaderboard-rank">#1</div>
+                <div class="leaderboard-name">Waiting for entries...</div>
+                <div class="leaderboard-score">0</div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="mode-event-card" id="grandslam-event-card">
           <div class="event-top">
@@ -1148,10 +1179,10 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
         <div class="bet-panel active" id="panel-quick" style="display:none">
           <div class="mode-note" style="color:rgba(231,76,60,0.8);margin-bottom:8px">One roll — bets settle instantly</div>
           <div class="quick-grid">
-            <button class="quick-action hit" onclick="placeBet('hit','HIT',1.5)">
+            <button class="quick-action hit" id="quick-bet-hit" onclick="quickBetAndRoll('hit','Bet Hit',1.5,this)">
               ⚾ HIT<div class="subodds" id="quick-hit-odds">1.5x</div>
             </button>
-            <button class="quick-action out" onclick="placeBet('out','OUT',1.1)">
+            <button class="quick-action out" id="quick-bet-out" onclick="quickBetAndRoll('out','Bet Out',1.1,this)">
               ✕ OUT<div class="subodds">1.1x</div>
             </button>
           </div>
@@ -1649,6 +1680,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 
 <!-- Main Menu Button -->
 <button class="btn-menu" onclick="showModeScreen()">☰ MENU</button>
+<button class="btn-stats" onclick="toggleStatsScreen()">STATS</button>
 
 <!-- Overlays -->
 <div class="flash-overlay" id="flash-overlay"></div>
@@ -1658,6 +1690,7 @@ body::before{content:'';position:fixed;inset:0;background-image:repeating-linear
 <div class="payout-flash" id="payout-flash"><h3 id="pf-text"></h3></div>
 <div class="confetti-container" id="confetti-container"></div>
 <div class="reaction-toast" id="reaction-toast">🔥</div>
+<div class="result-banner" id="result-banner"><div class="title" id="result-banner-title">OUT</div><div class="copy" id="result-banner-copy">Read the field and fire the next roll.</div></div>
 
 <div class="modal-backdrop" id="insufficient-funds-modal">
   <div class="modal-card">
@@ -1858,10 +1891,14 @@ const POWER_HOUR_START_HOUR = 20;
 const POWER_HOUR_DURATION_MS = 60 * 60 * 1000;
 const JACKPOT_BASE = 250;
 const POWER_BOARD_KEY = 'dicebaseball_power_board_v2';
+const POWER_SESSION_KEY = 'dicebaseball_power_session_v1';
 const DAILY_PROGRESS_KEY = 'dicebaseball_daily_progress_v2';
 const BET_HISTORY_KEY = 'dicebaseball_bet_history_v2';
 const GS_DAILY_KEY = 'dicebaseball_grandslam_daily_v2';
 const GS_JACKPOT_KEY = 'dicebaseball_grandslam_jackpot_v2';
+const PARLAY_ROLL_TYPES = new Set(['hit','out','single','double','hr','grandslam']);
+const PARLAY_ROUND_TYPES = new Set(['anytime-single','anytime-double','anytime-hr','ou-over','ou-under']);
+const PARLAY_GAME_TYPES = new Set(['ml-p1','ml-p2','extra-innings','big-inning','runs-over','runs-under','hits-over','hits-under','p1-win-by2','p2-win-by2','p1-hr','p2-hr']);
 
 const STATIC_NEXT_ODDS = (() => {
   let hit = 0, out = 0, hr = 0;
@@ -1950,6 +1987,17 @@ function getPowerBoard(){
   return saved;
 }
 function savePowerBoard(board){ saveStore(POWER_BOARD_KEY,board); }
+function getPowerSession(){
+  const date=localDateKey();
+  const saved=loadStore(POWER_SESSION_KEY,{date,completed:false,score:null});
+  if(!saved || saved.date!==date){
+    const fresh={date,completed:false,score:null};
+    saveStore(POWER_SESSION_KEY,fresh);
+    return fresh;
+  }
+  return saved;
+}
+function savePowerSession(session){ saveStore(POWER_SESSION_KEY,session); }
 function getGrandSlamDaily(){
   const date=localDateKey();
   const saved=loadStore(GS_DAILY_KEY,{date,played:false});
@@ -1981,6 +2029,67 @@ function showReaction(emoji){
   toast.classList.add('show');
   setTimeout(()=>toast.classList.remove('show'),1000);
 }
+function toggleStatsScreen(){
+  const screen=document.getElementById('stats-screen');
+  if(!screen) return;
+  if(screen.style.display==='block'){
+    screen.style.display='none';
+    return;
+  }
+  screen.style.display='block';
+  renderStatsScreen();
+}
+function clearQuickActionState(){
+  ['quick-bet-hit','quick-bet-out'].forEach(id=>{
+    const btn=document.getElementById(id);
+    if(btn) btn.classList.remove('firing','win','loss');
+  });
+}
+function describeBases(){
+  const spots=[];
+  if(G.bases[0]) spots.push('1st');
+  if(G.bases[1]) spots.push('2nd');
+  if(G.bases[2]) spots.push('3rd');
+  if(!spots.length) return 'Bases empty';
+  if(spots.length===1) return `Runner on ${spots[0]}`;
+  if(spots.length===2) return `Runners on ${spots[0]} and ${spots[1]}`;
+  return 'Bases loaded';
+}
+function showResultBanner(title, copy){
+  const banner=document.getElementById('result-banner');
+  if(!banner) return;
+  setText('result-banner-title', title);
+  setText('result-banner-copy', copy);
+  banner.classList.add('show');
+  clearTimeout(showResultBanner.timer);
+  showResultBanner.timer=setTimeout(()=>banner.classList.remove('show'), 1450);
+}
+function buildResultBannerCopy(outcome, runs){
+  if(G.mode==='quick'){
+    if(outcome.type==='out') return 'No cash this roll. Quick reset is coming.';
+    if(runs>0) return `${runs} run${runs===1?'':'s'} scored. One tap sets up the next shot.`;
+    return 'Bet settled instantly. Tap back in for the next Quick Roll.';
+  }
+  if(G.mode==='power'){
+    return `${runs||0} run${runs===1?'':'s'} scored. ${G.powerRollsLeft} roll${G.powerRollsLeft===1?'':'s'} remain.`;
+  }
+  if(G.mode==='h2h'){
+    return `${G.h2hHalf===0?'Top':'Bottom'} ${G.h2hInning} · ${describeBases()} · ${G.outs} out${G.outs===1?'':'s'}.`;
+  }
+  if(outcome.type==='out'){
+    return `${G.outs} out${G.outs===1?'':'s'} on the board. ${describeBases()}.`;
+  }
+  if(runs>0){
+    return `${runs} run${runs===1?'':'s'} scored. ${describeBases()}.`;
+  }
+  return `${describeBases()} with ${G.outs} out${G.outs===1?'':'s'}.`;
+}
+function getParlayTiming(type){
+  if(PARLAY_ROLL_TYPES.has(type)) return 'roll';
+  if(PARLAY_ROUND_TYPES.has(type)) return 'round';
+  if(PARLAY_GAME_TYPES.has(type)) return 'game';
+  return 'roll';
+}
 
 let G = {
   mode: null,          // 'quick' | 'inning' | 'power' | 'grandslam' | 'h2h' | 'clutch'
@@ -2008,6 +2117,7 @@ let G = {
   inningKeyPlays: [],
   lastInningSummary: null,
   quickWinStreak: 0,
+  quickSelection: null,
   autoRoll: { remaining:0, mode:null, timer:null },
   session: defaultSession(),
   audioCtx: null,
@@ -2319,14 +2429,33 @@ function updateModeEventCards(){
   if(powerCard) powerCard.style.display = G.mode==='power' ? 'block' : 'none';
   if(gsCard) gsCard.style.display = G.mode==='grandslam' ? 'block' : 'none';
   const powerInfo=getPowerHourInfo();
+  const powerSession=getPowerSession();
   setText('power-countdown', formatCountdown(powerInfo.msLeft));
-  setText('power-event-status', powerInfo.active ? 'LIVE' : 'LOCKED');
+  setText('power-event-status', powerSession.completed ? 'COMPLETE' : powerInfo.active ? 'LIVE' : 'LOCKED');
   const board=getPowerBoard().entries.sort((a,b)=>b.score-a.score).slice(0,10);
   const topScore=board[0]?.score || 0;
   setText('power-top-score', topScore);
   const playerRank=board.findIndex(entry=>entry.me);
   setText('power-rank', playerRank>=0 ? `#${playerRank+1}` : '#--');
-  setText('power-reward-copy', powerInfo.active ? '1st place earns the top bonus bet. Top 25% of entries still take a smaller reward.' : `Power Hour opens at ${POWER_HOUR_START_HOUR}:00 local time.`);
+  setText('power-reward-copy', powerSession.completed ? `Today's 9-roll run is locked at ${powerSession.score||0} runs.` : powerInfo.active ? '1st place earns the top bonus bet. Top 25% of entries still take a smaller reward.' : `Next session opens in ${formatCountdown(powerInfo.msLeft)}.`);
+  const powerModeCard=document.getElementById('power-mode-card');
+  const powerModeTag=document.getElementById('power-mode-tag');
+  const powerModeDesc=document.getElementById('power-mode-desc');
+  const powerLocked=!powerInfo.active || powerSession.completed;
+  if(powerModeCard) powerModeCard.classList.toggle('locked', powerLocked);
+  if(powerModeTag) powerModeTag.textContent = powerSession.completed ? 'COMPLETE' : powerInfo.active ? 'LIVE EVENT' : 'LOCKED';
+  if(powerModeDesc){
+    powerModeDesc.textContent = powerSession.completed
+      ? `Today's Power Hour is complete. Final score: ${powerSession.score||0} runs.`
+      : powerInfo.active
+        ? 'Live now. You get exactly 9 rolls to post your score to the board.'
+        : `Locked until the next window. Countdown: ${formatCountdown(powerInfo.msLeft)}.`;
+  }
+  const lb=document.getElementById('power-leaderboard-list');
+  if(lb){
+    const rows=board.slice(0,5);
+    lb.innerHTML = rows.length ? rows.map((entry,index)=>`<div class="leaderboard-row ${entry.me?'me':''}"><div class="leaderboard-rank">#${index+1}</div><div class="leaderboard-name">${entry.me?'You':'Player '+(index+1)}</div><div class="leaderboard-score">${entry.score}</div></div>`).join('') : `<div class="leaderboard-row"><div class="leaderboard-rank">#1</div><div class="leaderboard-name">Waiting for entries...</div><div class="leaderboard-score">0</div></div>`;
+  }
   const jackpot=getGrandSlamJackpot();
   const gsDaily=getGrandSlamDaily();
   setText('grandslam-jackpot', `$${jackpot.amount}`);
@@ -2351,13 +2480,13 @@ function renderParlayTracker(){
     board.innerHTML='<div class="p-empty">Build a parlay to watch every leg live.</div>';
     return;
   }
-  board.innerHTML=cards.map((p,cardIndex)=>{
+  board.innerHTML=cards.map((p)=>{
     const wins=p.legs.filter(leg=>leg.settled===true).length;
     const losses=p.legs.filter(leg=>leg.settled===false).length;
-    const icons=p.legs.map(leg=>leg.settled===true?'✅':leg.settled===false?'❌':'🟡').join(' ');
-    const note=p.note || (losses ? 'Missed by one outcome.' : p.done ? 'Celebration cash-out.' : 'Legs reveal one roll at a time.');
+    const icons=p.legs.map(leg=>leg.settled===true?'✅':leg.settled===false?'❌':'⏳').join(' ');
+    const note=p.note || (losses ? 'Parlay Lost' : p.done ? 'Parlay Won' : 'Waiting for the next scoring event.');
     const payout = p.payout || (p.done ? Math.round(p.stake*p.mult) : 0);
-    return `<div class="parlay-card"><div class="parlay-progress"><div class="parlay-progress-icons">${icons}</div><div class="parlay-progress-text">${wins}/${p.legs.length} Legs Hit</div></div><div class="parlay-meta"><div class="parlay-meta-item"><div class="label">Bet</div><div class="value">$${p.stake}</div></div><div class="parlay-meta-item"><div class="label">Potential</div><div class="value">$${Math.round(p.stake*p.mult)}</div></div><div class="parlay-meta-item"><div class="label">Actual</div><div class="value">$${payout}</div></div></div>${p.legs.map((leg,i)=>`<div class="parlay-row ${leg.settled===true?'win':leg.settled===false?'loss':'pending'} ${p.closestMiss===i?'closest':''}" style="animation-delay:${i*90}ms"><div class="icon">${leg.settled===true?'✅':leg.settled===false?'✖':'⏳'}</div><div class="label">${leg.label}</div><div class="result">${leg.settled===true?'WIN':leg.settled===false?'LOSS':'PENDING'}</div></div>`).join('')}<div class="parlay-note">${note}</div></div>`;
+    return `<div class="parlay-card"><div class="parlay-progress"><div class="parlay-progress-icons">${icons}</div><div class="parlay-progress-text">${wins}/${p.legs.length} Legs Hit</div></div><div class="parlay-meta"><div class="parlay-meta-item"><div class="label">Bet</div><div class="value">$${p.stake}</div></div><div class="parlay-meta-item"><div class="label">Potential</div><div class="value">$${Math.round(p.stake*p.mult)}</div></div><div class="parlay-meta-item"><div class="label">Actual</div><div class="value">$${payout}</div></div></div>${p.legs.map((leg,i)=>`<div class="parlay-row ${leg.settled===true?'win':leg.settled===false?'loss':'ready'} ${p.closestMiss===i?'closest':''}" style="animation-delay:${i*90}ms"><div class="icon">${leg.settled===true?'✅':leg.settled===false?'✖':'🎯'}</div><div class="label">${leg.label}</div><div class="result">${leg.settled===true?'HIT':leg.settled===false?'LOST':'READY'}</div></div>`).join('')}<div class="parlay-note">${note}</div></div>`;
   }).join('');
 }
 function pushParlayArchive(parlay, extra={}){
@@ -2424,6 +2553,9 @@ function nextQuickRoll(){
 // ═══════════════════════════════════════════
 function showModeScreen(){
   stopAutoRoll();
+  clearQuickActionState();
+  document.getElementById('stats-screen').style.display='none';
+  document.getElementById('result-banner').classList.remove('show');
   document.getElementById('mode-screen').style.display='flex';
   document.getElementById('h2h-setup').style.display='none';
   document.querySelector('.mode-cards').style.display='flex';
@@ -2448,13 +2580,22 @@ function showModeScreen(){
 }
 
 function startGame(mode){
-  if(mode==='power' && !getPowerHourInfo().active){
+  const powerInfo=getPowerHourInfo();
+  const powerSession=getPowerSession();
+  if(mode==='power' && !powerInfo.active){
     updateModeEventCards();
     showPayoutFlash(`POWER HOUR ${POWER_HOUR_START_HOUR}:00`, false);
     return;
   }
+  if(mode==='power' && powerSession.completed){
+    updateModeEventCards();
+    showPayoutFlash('POWER HOUR COMPLETE', false);
+    return;
+  }
   G.mode=mode;
   stopAutoRoll();
+  clearQuickActionState();
+  document.getElementById('result-banner').classList.remove('show');
   G.outs=0; G.bases=[false,false,false]; G.runs=0;
   G.hitStreak=0; G.rolling=false; G.gameOver=false;
   G.lastWasHit=false; G.streakHRHit=false; G.survivalMult=1.0;
@@ -2464,6 +2605,7 @@ function startGame(mode){
   G.inningDoubleOccurred=false; G.inningHROccurred=false;
   G.ouParlayLine=0;
   G.session.shown=false;
+  G.quickSelection=null;
   if(mode==='quick') G.quickWinStreak=0;
   if(mode==='power'){ G.powerRollsLeft=9; G.powerTotalRuns=0; G.powerRewardGiven=false; updatePowerCounter(); }
   if(mode==='grandslam'){ G.bases=[true,true,true]; }
@@ -2577,9 +2719,10 @@ function startGame(mode){
   document.getElementById('sv-roll').textContent='—';
   document.getElementById('lbl1').textContent='—';
   document.getElementById('lbl2').textContent='—';
-  document.getElementById('roll-result').textContent=mode==='clutch'?'Runners on 2nd and 3rd. One swing changes everything.':'Place your bets & roll!';
+  document.getElementById('roll-result').textContent=mode==='quick'?'Tap HIT or OUT to fire the next Quick Roll.':mode==='clutch'?'Runners on 2nd and 3rd. One swing changes everything.':'Place your bets & roll!';
   document.getElementById('roll-result').className='roll-result';
-  setText('roll-status-line', mode==='power'?'Live event is open. Nine rolls only.':mode==='grandslam'?'Daily jackpot is on the board.':mode==='clutch'?'Pressure counts are already loaded.':'Place a wager, read the odds, then fire away.');
+  setText('roll-status-line', mode==='quick'?'One tap on HIT or OUT places the bet and rolls instantly.':mode==='power'?'Live event is open. Nine rolls only.':mode==='grandslam'?'Daily jackpot is on the board.':mode==='clutch'?'Pressure counts are already loaded.':'Place a wager, read the odds, then fire away.');
+  document.getElementById('btn-roll').textContent = mode==='quick' ? 'ROLL EXACT BET' : '🎲 ROLL 🎲';
   document.getElementById('btn-roll').disabled=false;
   document.getElementById('btn-next-roll').classList.remove('visible');
   document.querySelectorAll('.outcome-row').forEach(r=>r.classList.remove('active-roll'));
@@ -2616,6 +2759,21 @@ function startGame(mode){
 function rollDice(){
   if(G.rolling||G.gameOver) return;
   if(G.mode==='inning'&&G.outs>=3) return;
+  if(G.mode==='quick' && !G.bets.length){
+    showPayoutFlash('PICK A BET', false);
+    return;
+  }
+  if(G.mode==='power'){
+    const powerInfo=getPowerHourInfo();
+    const powerSession=getPowerSession();
+    if(!powerInfo.active || powerSession.completed || G.powerRollsLeft<=0){
+      G.gameOver=true;
+      document.getElementById('btn-roll').disabled=true;
+      setText('roll-status-line', powerSession.completed ? 'Today’s Power Hour run is already complete.' : 'Power Hour is closed until the next session.');
+      updateModeEventCards();
+      return;
+    }
+  }
   G.rolling=true;
   document.getElementById('btn-roll').disabled=true;
   document.getElementById('btn-next-roll').classList.remove('visible');
@@ -2764,6 +2922,7 @@ function processPlay(outcome,v1,v2){
   G.session.bestStreak=Math.max(G.session.bestStreak||0, G.hitStreak);
   setText('roll-status-line', outcome.type==='out' ? 'Out on the board. Read the field and decide the next move.' : outcome.type==='hr' ? 'Ball jumped. Momentum is all the way live.' : 'Contact made. Watch the meter and press the next edge.');
   addLog(logText,logClass,v1,v2);
+  showResultBanner(outcome.type==='hr'?'HOME RUN':outcome.name.toUpperCase(), buildResultBannerCopy(outcome, runs));
 
   // Settle bets based on mode
   settlePerRollBets(outcome,runs);
@@ -2778,7 +2937,6 @@ function processPlay(outcome,v1,v2){
   // Grand Slam: always ends after one roll — settle then auto-reset
   if(G.mode==='grandslam'){
     settleGSBets(outcome, runs);
-    settleParlays(outcome, runs);
     const gsMsg = outcome.type==='hr'?'⚡ GRAND SLAM!! +'+runs+' RUNS!':runs>0?'Hit! +'+runs+' run'+(runs>1?'s':''):'OUT — Nothing Scores';
     document.getElementById('roll-result').textContent=gsMsg;
     document.getElementById('roll-result').className=outcome.type==='hr'?'roll-result homerun':'roll-result';
@@ -2815,15 +2973,17 @@ function processPlay(outcome,v1,v2){
   if(G.mode==='power'){
     G.powerRollsLeft--;
     updatePowerCounter();
-    settlePerRollBets(outcome,runs);
-    settleParlays(outcome,runs);
     if(G.powerRollsLeft<=0){
+      stopAutoRoll();
+      settlePowerOUBets();
+      settleAnyTimeParlayLegs('round');
       recordRoundEnd('power', G.powerTotalRuns, G.hitStreak);
       const board=getPowerBoard();
       board.entries=board.entries.filter(entry=>!entry.me);
       board.entries.push({ me:true, score:G.powerTotalRuns, ts:Date.now() });
       board.entries.sort((a,b)=>b.score-a.score || a.ts-b.ts);
       savePowerBoard(board);
+      savePowerSession({date:localDateKey(),completed:true,score:G.powerTotalRuns});
       const rank=board.entries.findIndex(entry=>entry.me)+1;
       if(!G.powerRewardGiven){
         if(rank===1){ G.bankroll+=100; showPayoutFlash('POWER HOUR 1ST +$100', true); }
@@ -2834,7 +2994,11 @@ function processPlay(outcome,v1,v2){
       const msg=`Power Hour done! ${G.powerTotalRuns} run${G.powerTotalRuns!==1?'s':''} scored`;
       document.getElementById('roll-result').textContent=msg;
       if(G.powerTotalRuns>=3) showConfetti();
-      setTimeout(()=>{ autoResetGame('power'); },1800);
+      G.gameOver=true;
+      document.getElementById('btn-roll').disabled=true;
+      setText('roll-status-line','Leaderboard updated. Your 9-roll Power Hour session is complete.');
+      updateBankrollDisplay();
+      refreshBettingAvailability();
     } else {
       G.bets=[]; renderActiveBets();
       document.getElementById('btn-roll').disabled=false;
@@ -2845,8 +3009,6 @@ function processPlay(outcome,v1,v2){
   // Head to Head
   if(G.mode==='h2h'){
     if(G.gameOver) return; // walk-off already triggered above
-    settlePerRollBets(outcome,runs);
-    settleParlays(outcome,runs);
     if(G.outs>=3){
       const side = G.h2hSide;
       const prevTotal = G.h2hInningRuns[side].reduce((a,b)=>a+b,0);
@@ -2863,36 +3025,38 @@ function processPlay(outcome,v1,v2){
   }
 
   if(G.mode==='quick'){
+    const quickWon = G.quickSelection ? ((G.quickSelection==='hit' && outcome.cat==='hit') || (G.quickSelection==='out' && outcome.cat==='out')) : null;
+    if(G.quickSelection){
+      const btn=document.getElementById(G.quickSelection==='hit' ? 'quick-bet-hit' : 'quick-bet-out');
+      if(btn) btn.classList.add(quickWon ? 'win' : 'loss');
+    }
     // Auto-reset after every roll — no game over screen
     if(outcome.cat==='out'){
       G.quickWinStreak=0;
       recordQuickRoll(false);
       recordRoundEnd('quick', G.runs, G.hitStreak);
-      // Brief pause so player sees the out, then auto-reset for next bet
-      setTimeout(()=>{
-        G.bets=[]; G.runs=0; G.gameOver=false;
-        document.getElementById('sv-runs').textContent='0';
-        document.getElementById('roll-result').textContent='OUT! Place new bets & roll again.';
-        document.getElementById('roll-result').className='roll-result';
-        document.getElementById('sv-roll').textContent='—';
-        document.getElementById('lbl1').textContent='—';
-        document.getElementById('lbl2').textContent='—';
-        document.querySelectorAll('.outcome-row').forEach(r=>r.classList.remove('active-roll'));
-        renderActiveBets();
-        document.getElementById('btn-roll').disabled=false;
-        setText('quick-streak-note','Win 2 in a row for +10% odds. Win 3+ for +25%.');
-      }, 1400);
     } else {
-      // Hit — clear settled bets and allow immediate re-bet & roll
       G.quickWinStreak++;
       updateChallengeProgress('quick-win',{streak:G.quickWinStreak});
       recordRoundEnd('quick', G.runs, G.hitStreak);
       recordQuickRoll(true);
-      G.bets=[];
+    }
+    const quickStreakCopy = G.quickWinStreak>=3 ? 'Quick Roll heater: +25% applied on wins at 3+ straight.' : G.quickWinStreak>=2 ? 'Quick Roll heater: +10% applied after 2 straight wins.' : 'One more quick win starts the multiplier ladder.';
+    setTimeout(()=>{
+      clearQuickActionState();
+      G.quickSelection=null;
+      G.bets=[]; G.runs=0; G.gameOver=false;
+      document.getElementById('sv-runs').textContent='0';
+      document.getElementById('roll-result').textContent='Tap HIT or OUT to fire the next Quick Roll.';
+      document.getElementById('roll-result').className='roll-result';
+      document.getElementById('sv-roll').textContent='—';
+      document.getElementById('lbl1').textContent='—';
+      document.getElementById('lbl2').textContent='—';
+      document.querySelectorAll('.outcome-row').forEach(r=>r.classList.remove('active-roll'));
       renderActiveBets();
       document.getElementById('btn-roll').disabled=false;
-      setText('quick-streak-note', G.quickWinStreak>=3 ? 'Quick Roll heater: +25% applied on wins at 3+ straight.' : G.quickWinStreak>=2 ? 'Quick Roll heater: +10% applied after 2 straight wins.' : 'One more quick win starts the multiplier ladder.');
-    }
+      setText('quick-streak-note', quickStreakCopy);
+    }, 1250);
   } else if(G.mode==='clutch'){
     recordRoundEnd('clutch', G.runs, G.hitStreak);
     setTimeout(()=>{
@@ -3044,10 +3208,11 @@ function autoResetGame(mode){
 // BET SETTLEMENT
 // ═══════════════════════════════════════════
 function settlePerRollBets(outcome,runs){
-  if(!G.bets.length) return;
+  const perRollBets=G.bets.filter(b=>!b.betKind);
+  if(!perRollBets.length) return;
   let total=0;
   const pl=document.getElementById('payout-log');
-  G.bets.forEach(b=>{
+  perRollBets.forEach(b=>{
     let win=false;
     if(b.type==='hit'     &&outcome.cat==='hit')    win=true;
     if(b.type==='out'     &&outcome.cat==='out')    win=true;
@@ -3081,7 +3246,7 @@ function settlePerRollBets(outcome,runs){
     }
     pl.insertBefore(entry,pl.firstChild);
   });
-  G.bets=[];
+  G.bets=G.bets.filter(b=>b.betKind);
   G.bankroll+=total;
   updateBankrollDisplay(); renderActiveBets();
   if(total>0) showPayoutFlash(`+$${total}`,true);
@@ -3165,144 +3330,94 @@ function settleRemainingBets(){
   updateBankrollDisplay(); renderActiveBets();
 }
 
+function evaluateRollParlayLeg(leg,outcome,runs){
+  if(leg.type==='hit') return outcome.cat==='hit';
+  if(leg.type==='out') return outcome.cat==='out';
+  if(leg.type==='single') return outcome.type==='single';
+  if(leg.type==='double') return outcome.type==='double';
+  if(leg.type==='hr') return outcome.type==='hr';
+  if(leg.type==='grandslam') return outcome.type==='hr' && runs===4;
+  return false;
+}
+function evaluateDeferredParlayLeg(leg){
+  if(leg.type==='anytime-single') return G.inningSingleOccurred;
+  if(leg.type==='anytime-double') return G.inningDoubleOccurred;
+  if(leg.type==='anytime-hr') return G.inningHROccurred;
+  if(leg.type==='ou-over') return (G.mode==='power' ? G.powerTotalRuns : G.runs) > leg.line;
+  if(leg.type==='ou-under') return (G.mode==='power' ? G.powerTotalRuns : G.runs) < leg.line;
+  if(leg.type==='ml-p1') return G.h2hRuns[0] > G.h2hRuns[1];
+  if(leg.type==='ml-p2') return G.h2hRuns[1] > G.h2hRuns[0];
+  if(leg.type==='extra-innings') return G.h2hInning > 5;
+  if(leg.type==='big-inning') return G.h2hInningRuns.some(side=>side.some(r=>r>=3));
+  if(leg.type==='p1-win-by2') return G.h2hRuns[0] > G.h2hRuns[1] && (G.h2hRuns[0]-G.h2hRuns[1]) >= 2;
+  if(leg.type==='p2-win-by2') return G.h2hRuns[1] > G.h2hRuns[0] && (G.h2hRuns[1]-G.h2hRuns[0]) >= 2;
+  if(leg.type==='p1-hr') return G.h2hHRs[0] > 0;
+  if(leg.type==='p2-hr') return G.h2hHRs[1] > 0;
+  if(leg.type==='runs-over') return (G.h2hRuns[0]+G.h2hRuns[1]) > (leg.line||4.5);
+  if(leg.type==='runs-under') return (G.h2hRuns[0]+G.h2hRuns[1]) < (leg.line||4.5);
+  if(leg.type==='hits-over') return (G.h2hTotalHits[0]+G.h2hTotalHits[1]) > (leg.line||3.5);
+  if(leg.type==='hits-under') return (G.h2hTotalHits[0]+G.h2hTotalHits[1]) < (leg.line||3.5);
+  return false;
+}
+function finalizeParlaySettlement(parlay){
+  const pl=document.getElementById('payout-log');
+  const firstMiss=parlay.legs.findIndex(leg=>leg.settled===false);
+  if(firstMiss>=0){
+    parlay.busted=true;
+    parlay.closestMiss=firstMiss;
+    parlay.note='Parlay Lost';
+    const entry=document.createElement('div');
+    entry.className='log-entry';
+    entry.innerHTML=`<span class="out-log">🎰 Parlay Lost — $${parlay.stake}</span>`;
+    pl.insertBefore(entry,pl.firstChild);
+    pushParlayArchive(parlay,{note:'Parlay Lost'});
+    showPayoutFlash('PARLAY LOST', false);
+    return 0;
+  }
+  parlay.done=true;
+  parlay.payout=Math.round(parlay.stake*parlay.mult);
+  parlay.note='Parlay Won';
+  const entry=document.createElement('div');
+  entry.className='log-entry';
+  entry.innerHTML=`<span class="hr-log">🎰 Parlay Won — $${parlay.payout}</span>`;
+  pl.insertBefore(entry,pl.firstChild);
+  pushParlayArchive(parlay,{payout:parlay.payout,note:'Parlay Won'});
+  showPayoutFlash(`PARLAY WON +$${parlay.payout}`, true);
+  showConfetti();
+  return parlay.payout;
+}
 function settleParlays(outcome,runs){
   if(!G.activeParlays.length) return;
   let total=0;
-  const pl=document.getElementById('payout-log');
-  G.activeParlays.forEach(p=>{
-    if(p.busted||p.done) return;
-    // Find next unsettled per-roll leg (skip anytime/ou/h2h-game legs)
-    const H2H_GAME_LEGS=['ml-p1','ml-p2','extra-innings','big-inning','runs-over','runs-under','hits-over','hits-under','p1-win-by2','p2-win-by2','p1-hr','p2-hr'];
-    const leg=p.legs.find(l=>l.settled===null && !l.type.startsWith('anytime-') && !l.type.startsWith('ou-') && !H2H_GAME_LEGS.includes(l.type));
-    if(!leg) return; // all remaining legs are deferred
-    let win=false;
-    if(leg.type==='hit'      &&outcome.cat==='hit')         win=true;
-    if(leg.type==='out'      &&outcome.cat==='out')         win=true;
-    if(leg.type==='single'   &&outcome.type==='single')     win=true;
-    if(leg.type==='double'   &&outcome.type==='double')     win=true;
-    if(leg.type==='hr'       &&outcome.type==='hr')         win=true;
-    if(leg.type==='grandslam'&&outcome.type==='hr'&&runs===4) win=true;
-    // H2H game-end legs skip per-roll settlement — handled in settleAnyTimeParlayLegs
-    const H2H_SKIP=['ml-p1','ml-p2','extra-innings','big-inning','runs-over','runs-under','hits-over','hits-under','p1-win-by2','p2-win-by2','p1-hr','p2-hr'];
-    if(H2H_SKIP.includes(leg.type)) return;
-    leg.settled=win;
-    p.legsLeft--;
-    const entry=document.createElement('div'); entry.className='log-entry';
-    if(!win){
-      p.busted=true;
-      p.closestMiss=p.legs.findIndex(l=>l.settled===false);
-      p.note='Missed by one outcome.';
-      // Show full leg breakdown on bust
-      const breakdown = p.legs.map(l=>{
-        const s = (l.settled===undefined)?null:l.settled;
-        const icon = s===true?'✓':s===false?'✗':'⏳';
-        const col  = s===true?'#66ff66':s===false?'#ff6b6b':'rgba(201,168,76,0.5)';
-        return '<span style="color:'+col+'">'+icon+' '+l.label+'</span>';
-      }).join(' &nbsp;·&nbsp; ');
-      entry.innerHTML='<div style="font-family:Oswald,sans-serif;font-size:10px"><span class="out-log">🎰 PARLAY BUSTED — LOST $'+p.stake+'</span><br><span style="font-size:9px;line-height:1.8;display:block;margin-top:3px">'+breakdown+'</span></div>';
-      pushParlayArchive(p,{note:p.note});
-    } else {
-      const allSettled=p.legs.every(l=>l.settled!==null);
-      if(allSettled){
-        p.done=true;
-        const pay=Math.round(p.stake*p.mult); total+=pay;
-        p.payout=pay;
-        p.note='Celebration cash-out.';
-        // Show full leg breakdown on win
-        const breakdown = p.legs.map(l=>{
-          const s=(l.settled===undefined)?true:l.settled;
-          const icon=s===false?'✗':'✓';
-          const col=s===false?'#ff6b6b':'#66ff66';
-          return '<span style="color:'+col+'">'+icon+' '+l.label+'</span>';
-        }).join(' &nbsp;·&nbsp; ');
-        entry.innerHTML='<div style="font-family:Oswald,sans-serif;font-size:10px"><span class="hr-log">🎰 PARLAY HIT! '+p.legs.length+' legs — WON $'+pay+'!</span><br><span style="font-size:9px;line-height:1.8;display:block;margin-top:3px">'+breakdown+'</span></div>';
-        showConfetti();
-        pushParlayArchive(p,{payout:pay,note:p.note});
-      } else {
-        const waitingForInning=p.legs.filter(l=>l.settled===null).every(l=>l.type.startsWith('anytime-')||l.type.startsWith('ou-')||['ml-p1','ml-p2','extra-innings','big-inning','runs-over','runs-under','hits-over','hits-under'].includes(l.type));
-        entry.innerHTML=`<span class="hit-log">🎰 Parlay leg ✓ ${leg.label} — ${waitingForInning?'waiting for end of round':p.legsLeft+' more legs'}</span>`;
-      }
-    }
-    pl.insertBefore(entry,pl.firstChild);
+  G.activeParlays.forEach(parlay=>{
+    if(parlay.busted || parlay.done || parlay.timing!=='roll') return;
+    parlay.legs.forEach(leg=>{
+      if(leg.settled!==null) return;
+      leg.settled = evaluateRollParlayLeg(leg,outcome,runs);
+    });
+    total += finalizeParlaySettlement(parlay);
   });
-  G.activeParlays=G.activeParlays.filter(p=>!p.busted&&!p.done);
-  G.bankroll+=total; updateBankrollDisplay(); renderParlayTracker();
-  if(total>0) showPayoutFlash(`+$${total}`,true);
+  G.activeParlays=G.activeParlays.filter(parlay=>!parlay.busted && !parlay.done);
+  G.bankroll+=total;
+  updateBankrollDisplay();
+  renderParlayTracker();
 }
 
-// Settle anytime parlay legs at end of inning
-function settleAnyTimeParlayLegs(){
+function settleAnyTimeParlayLegs(targetTiming = (G.mode==='h2h' ? 'game' : 'round')){
   if(!G.activeParlays.length) return;
   let total=0;
-  const pl=document.getElementById('payout-log');
-  G.activeParlays.forEach(p=>{
-    if(p.busted||p.done) return;
-    // Settle all remaining anytime + ou legs
-    p.legs.forEach(leg=>{
-      if(p.busted||p.done) return;
+  G.activeParlays.forEach(parlay=>{
+    if(parlay.busted || parlay.done || parlay.timing!==targetTiming) return;
+    parlay.legs.forEach(leg=>{
       if(leg.settled!==null) return;
-      // Only settle anytime- and ou- legs here (per-roll legs already settled)
-      const isH2HDeferred=['ml-p1','ml-p2','extra-innings','big-inning','runs-over','runs-under','hits-over','hits-under','p1-win-by2','p2-win-by2','p1-hr','p2-hr'].includes(leg.type);
-      if(!leg.type.startsWith('anytime-') && !leg.type.startsWith('ou-') && !isH2HDeferred) return;
-      let win=false;
-      if(leg.type==='anytime-single') win=G.inningSingleOccurred;
-      if(leg.type==='anytime-double') win=G.inningDoubleOccurred;
-      if(leg.type==='anytime-hr')     win=G.inningHROccurred;
-      if(leg.type==='ou-over')        win=(G.mode==='power'?G.powerTotalRuns:G.runs) > leg.line;
-      if(leg.type==='ou-under')       win=(G.mode==='power'?G.powerTotalRuns:G.runs) < leg.line;
-      // H2H game-end parlay legs
-      if(leg.type==='ml-p1')        win=G.h2hRuns[0]>G.h2hRuns[1];
-      if(leg.type==='ml-p2')        win=G.h2hRuns[1]>G.h2hRuns[0];
-      if(leg.type==='extra-innings') win=G.h2hInning>5;
-      if(leg.type==='big-inning')   win=G.h2hInningRuns.some(s=>s.some(r=>r>=3));
-      if(leg.type==='p1-win-by2')   win=G.h2hRuns[0]>G.h2hRuns[1] && (G.h2hRuns[0]-G.h2hRuns[1])>=2;
-      if(leg.type==='p2-win-by2')   win=G.h2hRuns[1]>G.h2hRuns[0] && (G.h2hRuns[1]-G.h2hRuns[0])>=2;
-      if(leg.type==='p1-hr')        win=G.h2hHRs[0]>0;
-      if(leg.type==='p2-hr')        win=G.h2hHRs[1]>0;
-      if(leg.type==='runs-over')    { const tl=leg.line||4.5; win=(G.h2hRuns[0]+G.h2hRuns[1])>tl; }
-      if(leg.type==='runs-under')   { const tl=leg.line||4.5; win=(G.h2hRuns[0]+G.h2hRuns[1])<tl; }
-      if(leg.type==='hits-over')    { const hl=leg.line||3.5; win=(G.h2hTotalHits[0]+G.h2hTotalHits[1])>hl; }
-      if(leg.type==='hits-under')   { const hl=leg.line||3.5; win=(G.h2hTotalHits[0]+G.h2hTotalHits[1])<hl; }
-      leg.settled=win;
-      p.legsLeft--;
-      const entry=document.createElement('div'); entry.className='log-entry';
-      if(!win){
-        p.busted=true;
-        p.closestMiss=p.legs.findIndex(l=>l.settled===false);
-        p.note='Missed by one outcome.';
-        const breakdown=p.legs.map(l=>{
-          const s=(l.settled===undefined)?null:l.settled;
-          const icon=s===true?'✓':s===false?'✗':'⏳';
-          const col=s===true?'#66ff66':s===false?'#ff6b6b':'rgba(201,168,76,0.5)';
-          return '<span style="color:'+col+'">'+icon+' '+l.label+'</span>';
-        }).join(' &nbsp;·&nbsp; ');
-        entry.innerHTML='<div style="font-family:Oswald,sans-serif;font-size:10px"><span class="out-log">🎰 PARLAY BUSTED — LOST $'+p.stake+'</span><br><span style="font-size:9px;line-height:1.8;display:block;margin-top:3px">'+breakdown+'</span></div>';
-        pl.insertBefore(entry,pl.firstChild);
-        pushParlayArchive(p,{note:p.note});
-      } else if(p.legsLeft===0){
-        p.done=true;
-        const pay=Math.round(p.stake*p.mult); total+=pay;
-        p.payout=pay;
-        p.note='Celebration cash-out.';
-        const breakdown=p.legs.map(l=>{
-          const s=(l.settled===undefined)?true:l.settled;
-          const col=s===false?'#ff6b6b':'#66ff66';
-          const icon=s===false?'✗':'✓';
-          return '<span style="color:'+col+'">'+icon+' '+l.label+'</span>';
-        }).join(' &nbsp;·&nbsp; ');
-        entry.innerHTML='<div style="font-family:Oswald,sans-serif;font-size:10px"><span class="hr-log">🎰 PARLAY HIT! All '+p.legs.length+' legs — WON $'+pay+'!</span><br><span style="font-size:9px;line-height:1.8;display:block;margin-top:3px">'+breakdown+'</span></div>';
-        pl.insertBefore(entry,pl.firstChild);
-        showConfetti();
-        pushParlayArchive(p,{payout:pay,note:p.note});
-      } else {
-        entry.innerHTML=`<span class="hit-log">🎰 Parlay leg ✓ ${leg.label} — ${p.legsLeft} legs left</span>`;
-        pl.insertBefore(entry,pl.firstChild);
-      }
+      leg.settled = evaluateDeferredParlayLeg(leg);
     });
+    total += finalizeParlaySettlement(parlay);
   });
-  G.activeParlays=G.activeParlays.filter(p=>!p.busted&&!p.done);
-  G.bankroll+=total; updateBankrollDisplay(); renderParlayTracker();
-  if(total>0) showPayoutFlash(`+$${total}`,true);
+  G.activeParlays=G.activeParlays.filter(parlay=>!parlay.busted && !parlay.done);
+  G.bankroll+=total;
+  updateBankrollDisplay();
+  renderParlayTracker();
 }
 
 // ═══════════════════════════════════════════
@@ -3311,10 +3426,10 @@ function settleAnyTimeParlayLegs(){
 function selectChip(val){ handleChipInput(val); }
 
 function placeBet(type,label,baseOdds){
-  if(G.gameOver){ showPayoutFlash('GAME OVER',false); return; }
+  if(G.gameOver){ showPayoutFlash('GAME OVER',false); return false; }
   const bonus=getStreakBonus();
   const odds=(['hit','single','double','hr'].includes(type))?+(baseOdds+bonus).toFixed(1):baseOdds;
-  if(!ensureStakeAvailable(G.chipValue)) return;
+  if(!ensureStakeAvailable(G.chipValue)) return false;
   const ex=G.bets.findIndex(b=>b.type===type);
   if(ex>=0) G.bets[ex].amount+=G.chipValue;
   else G.bets.push({type,label,odds,amount:G.chipValue});
@@ -3322,6 +3437,22 @@ function placeBet(type,label,baseOdds){
   G.bankroll-=G.chipValue;
   updateBankrollDisplay(); renderActiveBets();
   updateRollPayoutPreview(odds);
+  return true;
+}
+function quickBetAndRoll(type,label,baseOdds,btn){
+  if(G.mode!=='quick') return;
+  if(G.rolling || G.gameOver) return;
+  clearQuickActionState();
+  if(btn){
+    btn.classList.add('firing');
+    setTimeout(()=>btn.classList.remove('firing'), 220);
+  }
+  const placed=placeBet(type,label,baseOdds);
+  if(!placed) return;
+  G.quickSelection=type;
+  setTimeout(()=>{
+    if(!G.rolling) rollDice();
+  }, 120);
 }
 
 // Standard O/U bet (settles at end of round for all modes)
@@ -3451,12 +3582,19 @@ function placeParlay(){
   const stake=G.chipValue||10;
   if(!ensureStakeAvailable(stake)) return;
   if(!G.parlayLegs.length) return;
+  const timings=[...new Set(G.parlayLegs.map(leg=>getParlayTiming(leg.type)))];
+  if(timings.length>1){
+    showPayoutFlash('MATCH LEG TIMING', false);
+    return;
+  }
   const mult=G.parlayLegs.reduce((a,l)=>a*l.odds,1);
-  G.activeParlays.push({legs:[...G.parlayLegs],stake,mult,legsLeft:G.parlayLegs.length,busted:false,done:false,note:'Legs reveal one roll at a time.'});
+  const timing=timings[0] || 'roll';
+  const note=timing==='roll' ? 'Waiting for the next roll.' : timing==='round' ? 'Waiting for the inning result.' : 'Waiting for the final matchup.';
+  G.activeParlays.push({legs:G.parlayLegs.map(leg=>({...leg, settled:null})),stake,mult,timing,busted:false,done:false,note});
   G.bankroll-=stake;
   updateBankrollDisplay();
   const entry=document.createElement('div'); entry.className='log-entry';
-  entry.innerHTML=`<span style="color:#ff6b00">🎰 Parlay: ${G.parlayLegs.length} legs @ ${mult.toFixed(1)}x — $${stake}</span>`;
+  entry.innerHTML=`<span style="color:#ff6b00">🎰 Parlay: ${G.parlayLegs.length} legs @ ${mult.toFixed(1)}x — $${stake} (${timing.toUpperCase()})</span>`;
   document.getElementById('payout-log').insertBefore(entry,document.getElementById('payout-log').firstChild);
   renderParlayTracker();
   clearParlay();
