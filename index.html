@@ -159,9 +159,9 @@ body.test-mode .header .subtitle{color:#ffb3ad;}
 .runner{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--gold-light);border:2px solid var(--gold);box-shadow:0 0 8px var(--gold),0 0 3px rgba(255,255,255,0.5);z-index:3;display:none;animation:runnerPop 0.3s ease-out;}
 .runner.show{display:block;}
 @keyframes runnerPop{from{transform:scale(0);}to{transform:scale(1);}}
-.runner-1st{bottom:22px;right:10px;}
-.runner-2nd{top:10px;left:50%;transform:translateX(-50%);}
-.runner-3rd{bottom:22px;left:10px;}
+.runner-1st{bottom:22px;right:18px;}
+.runner-2nd{top:18px;left:50%;transform:translateX(-50%);}
+.runner-3rd{bottom:22px;left:18px;}
 /* Out indicator dots — larger, styled */
 .out-dots-row{display:flex;justify-content:center;gap:8px;margin:6px 0;}
 .out-pip{width:14px;height:14px;border-radius:50%;border:2px solid rgba(192,57,43,0.4);background:rgba(0,0,0,0.4);transition:all 0.3s;}
@@ -189,8 +189,14 @@ body.test-mode .header .subtitle{color:#ffb3ad;}
 .h2h-mini-grass{position:absolute;inset:0;background:radial-gradient(ellipse,#1a4a1a,#0f2f0f);border-radius:3px;border:1px solid rgba(201,168,76,0.1);}
 .h2h-mini-base{position:absolute;width:12px;height:12px;border:1px solid var(--gold-dark);background:#1a1a0a;transform:rotate(45deg);transition:all 0.25s;}
 .h2h-mini-base.on{background:var(--gold);border-color:var(--gold-light);box-shadow:0 0 8px var(--gold);}
+.h2h-mini-base-1st{bottom:10px;right:8px;}
+.h2h-mini-base-2nd{top:6px;left:50%;transform:translateX(-50%) rotate(45deg);}
+.h2h-mini-base-3rd{bottom:10px;left:8px;}
 .h2h-mini-runner{position:absolute;width:8px;height:8px;border-radius:50%;background:var(--gold-light);border:1px solid var(--gold);display:none;z-index:3;}
 .h2h-mini-runner.show{display:block;}
+.h2h-mini-runner-1st{bottom:12px;right:10px;}
+.h2h-mini-runner-2nd{top:8px;left:50%;transform:translateX(-50%);}
+.h2h-mini-runner-3rd{bottom:12px;left:10px;}
 
 /* ── STREAK DISPLAY ── */
 .streak-box{background:#080f08;border:1px solid var(--gold-dark);border-radius:4px;padding:7px 10px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center;}
@@ -235,9 +241,15 @@ body.test-mode .header .subtitle{color:#ffb3ad;}
 .inline-base-home{bottom:4px;left:50%;transform:translateX(-50%) rotate(45deg);border-color:rgba(255,255,255,0.3);background:#111;width:13px;height:13px;}
 .inline-runner{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--gold-light);border:2px solid var(--gold);box-shadow:0 0 6px var(--gold);z-index:3;display:none;animation:runnerPop 0.3s ease-out;}
 .inline-runner.show{display:block;}
-.inline-runner-1st{bottom:18px;right:6px;}
-.inline-runner-2nd{top:8px;left:50%;transform:translateX(-50%);}
-.inline-runner-3rd{bottom:18px;left:6px;}
+.inline-runner-1st{bottom:18px;right:12px;}
+.inline-runner-2nd{top:14px;left:50%;transform:translateX(-50%);}
+.inline-runner-3rd{bottom:18px;left:12px;}
+.inline-h2h-base-1st{bottom:10px;right:8px;}
+.inline-h2h-base-2nd{top:8px;left:50%;transform:translateX(-50%) rotate(45deg);}
+.inline-h2h-base-3rd{bottom:10px;left:8px;}
+.inline-h2h-runner-1st{bottom:12px;right:10px;}
+.inline-h2h-runner-2nd{top:10px;left:50%;transform:translateX(-50%);}
+.inline-h2h-runner-3rd{bottom:12px;left:10px;}
 /* Right side: outs + counts + mode-specific */
 .inline-right{flex:1;display:flex;flex-direction:column;gap:6px;}
 .inline-counts{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
@@ -450,6 +462,16 @@ body.test-mode .header .subtitle{color:#ffb3ad;}
 .quick-action.double{background:rgba(52,152,219,0.2);border-color:rgba(116,185,255,0.46);color:#a9d8ff;}
 .quick-action.hr{background:rgba(255,107,0,0.24);border-color:rgba(255,107,0,0.52);color:#ffbf86;}
 .quick-action.full-span{grid-column:1/-1;}
+.quick-meta-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;margin-top:8px;}
+.quick-meta-card{background:rgba(0,0,0,0.24);border:1px solid rgba(201,168,76,0.18);border-radius:10px;padding:8px 10px;font-size:11px;color:var(--cream);}
+.quick-meta-card.empty{color:rgba(245,230,200,0.55);}
+.quick-meta-actions{display:flex;justify-content:flex-end;}
+.quick-summary-list{display:flex;flex-direction:column;gap:5px;}
+.quick-summary-item{display:flex;align-items:center;justify-content:space-between;gap:8px;font-family:'Oswald',sans-serif;font-size:11px;}
+.quick-summary-item .tag{font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:1px;}
+.quick-summary-item.win .tag,.quick-summary-item.win .value{color:#66ff88;}
+.quick-summary-item.loss .tag,.quick-summary-item.loss .value{color:#ff7675;}
+.quick-summary-total{margin-top:6px;padding-top:6px;border-top:1px solid rgba(201,168,76,0.14);font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:1px;color:var(--gold-light);display:flex;justify-content:space-between;gap:8px;}
 @keyframes quickTap{0%{transform:scale(1);}45%{transform:scale(0.95);}100%{transform:scale(1.02);}}
 .mode-event-card{display:none;}
 .mode-event-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
@@ -759,22 +781,22 @@ body[data-mode="quick"] #streak-box-display{display:none!important;}
             <div class="s-val" id="sv-roll" style="font-size:13px;padding-top:7px">—</div>
           </div>
           <div class="status-item">
-            <div class="s-label">Outs</div>
+            <div class="s-label" id="sv-outs-label">Outs</div>
             <div class="s-val" id="sv-outs">0</div>
           </div>
         </div>
 
         <div class="inning-scoreboard" id="inning-scoreboard">
           <div class="inning-score-cell">
-            <div class="label">OUTS</div>
+            <div class="label" id="inning-score-label-1">OUTS</div>
             <div class="value" id="inning-score-outs">0/3</div>
           </div>
           <div class="inning-score-cell">
-            <div class="label">HITS</div>
+            <div class="label" id="inning-score-label-2">HITS</div>
             <div class="value" id="inning-score-hits">0</div>
           </div>
           <div class="inning-score-cell">
-            <div class="label">BEST PLAY</div>
+            <div class="label" id="inning-score-label-3">BEST PLAY</div>
             <div class="value" id="inning-score-best" style="font-size:18px">—</div>
           </div>
         </div>
@@ -845,12 +867,12 @@ body[data-mode="quick"] #streak-box-display{display:none!important;}
               <div class="h2h-field-label p1" id="h2h-field-label-1">PLAYER 1</div>
               <div class="h2h-mini-field" id="h2h-mini-1">
                 <div class="h2h-mini-grass"></div>
-                <div class="h2h-mini-base" id="h2h-mb-1-2" style="top:6px;left:50%;transform:translateX(-50%) rotate(45deg)"></div>
-                <div class="h2h-mini-base" id="h2h-mb-1-3" style="bottom:10px;left:8px"></div>
-                <div class="h2h-mini-base" id="h2h-mb-1-1" style="bottom:10px;right:8px"></div>
-                <div class="h2h-mini-runner" id="h2h-mr-1-1" style="bottom:13px;right:4px"></div>
-                <div class="h2h-mini-runner" id="h2h-mr-1-2" style="top:4px;left:50%;transform:translateX(-50%)"></div>
-                <div class="h2h-mini-runner" id="h2h-mr-1-3" style="bottom:13px;left:4px"></div>
+                <div class="h2h-mini-base h2h-mini-base-2nd" id="h2h-mb-1-2"></div>
+                <div class="h2h-mini-base h2h-mini-base-3rd" id="h2h-mb-1-3"></div>
+                <div class="h2h-mini-base h2h-mini-base-1st" id="h2h-mb-1-1"></div>
+                <div class="h2h-mini-runner h2h-mini-runner-1st" id="h2h-mr-1-1"></div>
+                <div class="h2h-mini-runner h2h-mini-runner-2nd" id="h2h-mr-1-2"></div>
+                <div class="h2h-mini-runner h2h-mini-runner-3rd" id="h2h-mr-1-3"></div>
               </div>
               <div class="out-dots-row" style="margin-top:4px">
                 <div class="out-pip" id="h2h-out-1-1"></div>
@@ -862,12 +884,12 @@ body[data-mode="quick"] #streak-box-display{display:none!important;}
               <div class="h2h-field-label p2" id="h2h-field-label-2">PLAYER 2</div>
               <div class="h2h-mini-field" id="h2h-mini-2">
                 <div class="h2h-mini-grass"></div>
-                <div class="h2h-mini-base" id="h2h-mb-2-2" style="top:6px;left:50%;transform:translateX(-50%) rotate(45deg)"></div>
-                <div class="h2h-mini-base" id="h2h-mb-2-3" style="bottom:10px;left:8px"></div>
-                <div class="h2h-mini-base" id="h2h-mb-2-1" style="bottom:10px;right:8px"></div>
-                <div class="h2h-mini-runner" id="h2h-mr-2-1" style="bottom:13px;right:4px"></div>
-                <div class="h2h-mini-runner" id="h2h-mr-2-2" style="top:4px;left:50%;transform:translateX(-50%)"></div>
-                <div class="h2h-mini-runner" id="h2h-mr-2-3" style="bottom:13px;left:4px"></div>
+                <div class="h2h-mini-base h2h-mini-base-2nd" id="h2h-mb-2-2"></div>
+                <div class="h2h-mini-base h2h-mini-base-3rd" id="h2h-mb-2-3"></div>
+                <div class="h2h-mini-base h2h-mini-base-1st" id="h2h-mb-2-1"></div>
+                <div class="h2h-mini-runner h2h-mini-runner-1st" id="h2h-mr-2-1"></div>
+                <div class="h2h-mini-runner h2h-mini-runner-2nd" id="h2h-mr-2-2"></div>
+                <div class="h2h-mini-runner h2h-mini-runner-3rd" id="h2h-mr-2-3"></div>
               </div>
               <div class="out-dots-row" style="margin-top:4px">
                 <div class="out-pip" id="h2h-out-2-1"></div>
@@ -929,7 +951,7 @@ body[data-mode="quick"] #streak-box-display{display:none!important;}
                   <div class="icb-val green" id="icb-runs">0</div>
                 </div>
                 <div class="inline-count-box">
-                  <div class="icb-label">OUTS</div>
+                  <div class="icb-label" id="icb-outs-label">OUTS</div>
                   <div class="icb-val" id="icb-outs">0</div>
                 </div>
               </div>
@@ -971,12 +993,12 @@ body[data-mode="quick"] #streak-box-display{display:none!important;}
               <div style="font-family:'Bebas Neue',sans-serif;font-size:9px;letter-spacing:1px;color:#74b9ff;text-align:center;margin-bottom:3px" id="ih2h-field-lbl-1">P1 FIELD</div>
               <div style="position:relative;width:80px;height:80px;margin:0 auto">
                 <div style="position:absolute;inset:0;background:radial-gradient(ellipse,#1a4a1a,#0f2f0f);border-radius:3px;border:1px solid rgba(116,185,255,0.15)"></div>
-                <div class="inline-base" id="ih2h-b1-2" style="top:8px;left:50%;transform:translateX(-50%) rotate(45deg);width:13px;height:13px"></div>
-                <div class="inline-base" id="ih2h-b1-3" style="bottom:10px;left:8px;width:13px;height:13px"></div>
-                <div class="inline-base" id="ih2h-b1-1" style="bottom:10px;right:8px;width:13px;height:13px"></div>
-                <div class="inline-runner" id="ih2h-r1-1" style="bottom:13px;right:4px;width:8px;height:8px"></div>
-                <div class="inline-runner" id="ih2h-r1-2" style="top:5px;left:50%;transform:translateX(-50%);width:8px;height:8px"></div>
-                <div class="inline-runner" id="ih2h-r1-3" style="bottom:13px;left:4px;width:8px;height:8px"></div>
+                <div class="inline-base inline-h2h-base-2nd" id="ih2h-b1-2" style="width:13px;height:13px"></div>
+                <div class="inline-base inline-h2h-base-3rd" id="ih2h-b1-3" style="width:13px;height:13px"></div>
+                <div class="inline-base inline-h2h-base-1st" id="ih2h-b1-1" style="width:13px;height:13px"></div>
+                <div class="inline-runner inline-h2h-runner-1st" id="ih2h-r1-1" style="width:8px;height:8px"></div>
+                <div class="inline-runner inline-h2h-runner-2nd" id="ih2h-r1-2" style="width:8px;height:8px"></div>
+                <div class="inline-runner inline-h2h-runner-3rd" id="ih2h-r1-3" style="width:8px;height:8px"></div>
               </div>
               <div class="inline-out-pips" style="margin-top:4px">
                 <div class="inline-out-pip" id="ih2h-o1-1"></div>
@@ -988,12 +1010,12 @@ body[data-mode="quick"] #streak-box-display{display:none!important;}
               <div style="font-family:'Bebas Neue',sans-serif;font-size:9px;letter-spacing:1px;color:#ff7675;text-align:center;margin-bottom:3px" id="ih2h-field-lbl-2">P2 FIELD</div>
               <div style="position:relative;width:80px;height:80px;margin:0 auto">
                 <div style="position:absolute;inset:0;background:radial-gradient(ellipse,#1a4a1a,#0f2f0f);border-radius:3px;border:1px solid rgba(255,118,117,0.15)"></div>
-                <div class="inline-base" id="ih2h-b2-2" style="top:8px;left:50%;transform:translateX(-50%) rotate(45deg);width:13px;height:13px"></div>
-                <div class="inline-base" id="ih2h-b2-3" style="bottom:10px;left:8px;width:13px;height:13px"></div>
-                <div class="inline-base" id="ih2h-b2-1" style="bottom:10px;right:8px;width:13px;height:13px"></div>
-                <div class="inline-runner" id="ih2h-r2-1" style="bottom:13px;right:4px;width:8px;height:8px"></div>
-                <div class="inline-runner" id="ih2h-r2-2" style="top:5px;left:50%;transform:translateX(-50%);width:8px;height:8px"></div>
-                <div class="inline-runner" id="ih2h-r2-3" style="bottom:13px;left:4px;width:8px;height:8px"></div>
+                <div class="inline-base inline-h2h-base-2nd" id="ih2h-b2-2" style="width:13px;height:13px"></div>
+                <div class="inline-base inline-h2h-base-3rd" id="ih2h-b2-3" style="width:13px;height:13px"></div>
+                <div class="inline-base inline-h2h-base-1st" id="ih2h-b2-1" style="width:13px;height:13px"></div>
+                <div class="inline-runner inline-h2h-runner-1st" id="ih2h-r2-1" style="width:8px;height:8px"></div>
+                <div class="inline-runner inline-h2h-runner-2nd" id="ih2h-r2-2" style="width:8px;height:8px"></div>
+                <div class="inline-runner inline-h2h-runner-3rd" id="ih2h-r2-3" style="width:8px;height:8px"></div>
               </div>
               <div class="inline-out-pips" style="margin-top:4px">
                 <div class="inline-out-pip" id="ih2h-o2-1"></div>
@@ -1172,22 +1194,29 @@ body[data-mode="quick"] #streak-box-display{display:none!important;}
         <div class="bet-panel active" id="panel-quick" style="display:none">
           <div class="mode-note" style="color:rgba(231,76,60,0.8);margin-bottom:8px">1 roll.</div>
           <div class="quick-grid compact" id="quick-roll-board">
-            <button class="quick-action hit" id="quick-bet-hit" data-quick-bet="hit" onclick="quickBetAndRoll('hit',this)">
+            <button class="quick-action hit" id="quick-bet-hit" data-quick-bet="hit" onclick="selectQuickBet('hit',this)">
               ⚾ HIT<div class="subodds" id="quick-hit-odds">1:1</div>
             </button>
-            <button class="quick-action out" id="quick-bet-out" data-quick-bet="out" onclick="quickBetAndRoll('out',this)">
+            <button class="quick-action out" id="quick-bet-out" data-quick-bet="out" onclick="selectQuickBet('out',this)">
               ✕ OUT<div class="subodds" id="quick-out-odds">1:1</div>
             </button>
-            <button class="quick-action single" id="quick-bet-single" data-quick-bet="single" onclick="quickBetAndRoll('single',this)">
+            <button class="quick-action single" id="quick-bet-single" data-quick-bet="single" onclick="selectQuickBet('single',this)">
               1B SINGLE<div class="subodds" id="quick-single-odds">2:1</div>
             </button>
-            <button class="quick-action double" id="quick-bet-double" data-quick-bet="double" onclick="quickBetAndRoll('double',this)">
+            <button class="quick-action double" id="quick-bet-double" data-quick-bet="double" onclick="selectQuickBet('double',this)">
               2B DOUBLE<div class="subodds" id="quick-double-odds">4:1</div>
             </button>
-            <button class="quick-action hr full-span" id="quick-bet-hr" data-quick-bet="hr" onclick="quickBetAndRoll('hr',this)">
+            <button class="quick-action hr full-span" id="quick-bet-hr" data-quick-bet="hr" onclick="selectQuickBet('hr',this)">
               ⚡ HOME RUN<div class="subodds" id="quick-hr-odds">20:1</div>
             </button>
           </div>
+          <div class="quick-meta-row">
+            <div class="quick-meta-card empty" id="quick-bet-summary">No bets placed.</div>
+            <div class="quick-meta-actions">
+              <button class="utility-btn danger" id="quick-clear-bets" onclick="clearQuickBets()">CLEAR BETS</button>
+            </div>
+          </div>
+          <div class="quick-meta-card empty" id="quick-results-summary">Pick one or more bets, then roll.</div>
           <div class="bankroll-health-note" id="quick-streak-note">2W +10% · 3W +25%</div>
         </div>
 
@@ -1859,6 +1888,7 @@ body[data-mode="quick"] #streak-box-display{display:none!important;}
   <button class="tab-btn"        id="tab-stats" onclick="switchTab('stats')"><span class="ti">🏆</span>STATS</button>
 </div>
 
+<script src="./quick-roll-payouts.js"></script>
 <script>
 // ═══════════════════════════════════════════
 // SECURE RNG — uses crypto.getRandomValues instead of Math.random()
@@ -1924,14 +1954,20 @@ const BET_HISTORY_KEY = 'dicebaseball_bet_history_v2';
 const GS_DAILY_KEY = 'dicebaseball_grandslam_daily_v2';
 const GS_JACKPOT_KEY = 'dicebaseball_grandslam_jackpot_v2';
 const PARLAY_ROLL_TYPES = new Set(['hit','out','single','double','hr','grandslam']);
-const PARLAY_ROUND_TYPES = new Set(['anytime-single','anytime-double','anytime-hr','ou-over','ou-under']);
+const PARLAY_ROUND_TYPES = new Set(['anytime-single','anytime-double','anytime-hr','anytime-run','anytime-runscored','ou-over','ou-under']);
 const PARLAY_GAME_TYPES = new Set(['ml-p1','ml-p2','extra-innings','big-inning','runs-over','runs-under','hits-over','hits-under','p1-win-by2','p2-win-by2','p1-hr','p2-hr']);
-const quickRollPayouts = {
-  hit: 1,
-  out: 1,
-  single: 2,
-  double: 4,
-  homeRun: 20
+const quickRollPayoutConfig = globalThis.QUICK_ROLL_PAYOUT_CONFIG || {
+  displayStyle: 'american',
+  bets: {
+    hit: { label:'Hit', profitMultiplier:1.45, display:'+145', targetEdgeMin:0.03, targetEdgeMax:0.08 },
+    out: { label:'Out', profitMultiplier:0.55, display:'+55', targetEdgeMin:0.03, targetEdgeMax:0.08 },
+    single: { label:'Single', profitMultiplier:2.10, display:'+210', targetEdgeMin:0.10, targetEdgeMax:0.20 },
+    double: { label:'Double', profitMultiplier:9.50, display:'+950', targetEdgeMin:0.10, targetEdgeMax:0.20 },
+    homeRun: { label:'Home Run', profitMultiplier:30.00, display:'+3000', targetEdgeMin:0.10, targetEdgeMax:0.20 },
+  },
+  legacyProfitMultipliers: { hit:1, out:1, single:2, double:4, homeRun:20 },
+  targetHouseEdges: { standardMin:0.03, standardMax:0.08, exactMin:0.10, exactMax:0.20, parlayMin:0.15, parlayMax:0.30 },
+  parlayRake: 0.18
 };
 const QUICK_ROLL_BETS = {
   hit:    { label:'Hit',       payoutKey:'hit',      buttonId:'quick-bet-hit',    betType:'quick-hit' },
@@ -1940,6 +1976,11 @@ const QUICK_ROLL_BETS = {
   double: { label:'Double',    payoutKey:'double',   buttonId:'quick-bet-double', betType:'double' },
   hr:     { label:'Home Run',  payoutKey:'homeRun',  buttonId:'quick-bet-hr',     betType:'hr' }
 };
+const ANYTIME_PARLAY_TYPES = new Set(['anytime-single','anytime-double','anytime-hr','anytime-run','anytime-runscored']);
+const H2H_MINI_BASE_CLASSES = ['h2h-mini-base h2h-mini-base-1st','h2h-mini-base h2h-mini-base-2nd','h2h-mini-base h2h-mini-base-3rd'];
+const H2H_MINI_RUNNER_CLASSES = ['h2h-mini-runner h2h-mini-runner-1st','h2h-mini-runner h2h-mini-runner-2nd','h2h-mini-runner h2h-mini-runner-3rd'];
+const INLINE_H2H_BASE_CLASSES = ['inline-base inline-h2h-base-1st','inline-base inline-h2h-base-2nd','inline-base inline-h2h-base-3rd'];
+const INLINE_H2H_RUNNER_CLASSES = ['inline-runner inline-h2h-runner-1st','inline-runner inline-h2h-runner-2nd','inline-runner inline-h2h-runner-3rd'];
 
 const STATIC_NEXT_ODDS = (() => {
   let hit = 0, out = 0, hr = 0;
@@ -2001,7 +2042,11 @@ function getQuickRollMeta(selection){
 }
 function getQuickRollDisplayOdds(selection){
   const meta=getQuickRollMeta(selection);
-  return meta ? (quickRollPayouts[meta.payoutKey] || 1) : 1;
+  return meta ? (quickRollPayoutConfig.bets[meta.payoutKey]?.profitMultiplier || 1) : 1;
+}
+function getQuickRollDisplayLabel(selection){
+  const meta=getQuickRollMeta(selection);
+  return meta ? (quickRollPayoutConfig.bets[meta.payoutKey]?.display || '+100') : '+100';
 }
 function getQuickRollBetOdds(selection){
   return 1 + getQuickRollDisplayOdds(selection);
@@ -2009,11 +2054,21 @@ function getQuickRollBetOdds(selection){
 function getQuickRollButtonId(selection){
   return getQuickRollMeta(selection)?.buttonId || '';
 }
+function getQuickRollSelectionFromBetType(type){
+  for(const [selection, meta] of Object.entries(QUICK_ROLL_BETS)){
+    if(meta.betType===type) return selection;
+  }
+  return null;
+}
+function getQuickRollBets(){
+  return G.bets.filter(b=>!b.betKind);
+}
 function formatQuickRollOddsLabel(selection){
-  const quickBoost = G.quickWinStreak>=3 ? 1.25 : G.quickWinStreak>=2 ? 1.10 : 1;
+  const quickNextStreak = (G.quickWinStreak || 0) + 1;
+  const quickBoost = quickNextStreak>=3 ? 1.25 : quickNextStreak>=2 ? 1.10 : 1;
   const boosted = getQuickRollDisplayOdds(selection) * quickBoost;
-  const rounded = boosted % 1 === 0 ? boosted.toFixed(0) : boosted.toFixed(2).replace(/0$/,'').replace(/\.$/,'');
-  return `${rounded}:1`;
+  const american = Math.round(boosted * 100);
+  return `+${american}`;
 }
 function renderQuickRollOdds(){
   setText('quick-hit-odds', formatQuickRollOddsLabel('hit'));
@@ -2028,6 +2083,12 @@ function didQuickRollBetWin(selection, outcome){
   if(meta.betType==='quick-hit') return ['single','double','hr'].includes(outcome.type);
   if(meta.betType==='quick-out') return outcome.cat==='out';
   return evaluateRollParlayLeg({type:meta.betType}, outcome, 0);
+}
+function isAnytimeParlayType(type){
+  return ANYTIME_PARLAY_TYPES.has(type);
+}
+function isAnytimeRunType(type){
+  return type==='anytime-run' || type==='anytime-runscored';
 }
 function defaultSession(){
   return { startBankroll:START_BANKROLL, bestStreak:0, biggestWin:0, profit:0, rounds:0, shown:false };
@@ -2155,6 +2216,97 @@ function toggleStatsScreen(){
 function clearQuickActionState(){
   document.querySelectorAll('[data-quick-bet]').forEach(btn=>btn.classList.remove('firing','selected','win','loss'));
 }
+function renderQuickBetBoard(resultMap=null){
+  Object.entries(QUICK_ROLL_BETS).forEach(([selection, meta])=>{
+    const btn=document.getElementById(meta.buttonId);
+    if(!btn) return;
+    btn.classList.remove('selected','win','loss');
+    const activeBet=getQuickRollBets().find(b=>b.type===meta.betType);
+    if(resultMap && resultMap[selection]){
+      btn.classList.add(resultMap[selection].win ? 'win' : 'loss');
+    } else if(activeBet){
+      btn.classList.add('selected');
+    }
+  });
+}
+function renderQuickBetSummary(){
+  const card=document.getElementById('quick-bet-summary');
+  const clearBtn=document.getElementById('quick-clear-bets');
+  if(!card) return;
+  const bets=getQuickRollBets();
+  if(!bets.length){
+    card.className='quick-meta-card empty';
+    card.textContent='No bets placed.';
+    if(clearBtn) clearBtn.disabled=true;
+    return;
+  }
+  const totalStake=bets.reduce((sum, bet)=>sum+bet.amount,0);
+  card.className='quick-meta-card';
+  card.innerHTML=`<div class="quick-summary-list">${bets.map(bet=>`<div class="quick-summary-item"><span class="tag">${bet.label}</span><span class="value">$${bet.amount}</span></div>`).join('')}</div><div class="quick-summary-total"><span>Stake</span><span>$${totalStake}</span></div>`;
+  if(clearBtn) clearBtn.disabled=G.rolling;
+}
+function renderQuickResultsSummary(summary=G.quickLastResolution){
+  const card=document.getElementById('quick-results-summary');
+  if(!card) return;
+  if(!summary || !summary.bets?.length){
+    card.className='quick-meta-card empty';
+    card.textContent='Pick one or more bets, then roll.';
+    renderQuickBetBoard();
+    return;
+  }
+  const totalClass = summary.net>0 ? 'win' : summary.net<0 ? 'loss' : '';
+  const totalLabel = summary.net>0 ? `+$${summary.net}` : summary.net<0 ? `-$${Math.abs(summary.net)}` : '$0';
+  card.className='quick-meta-card';
+  card.innerHTML=`<div class="quick-summary-list">${summary.bets.map(bet=>`<div class="quick-summary-item ${bet.win?'win':'loss'}"><span class="tag">${bet.win?'✓':'✕'} ${bet.label}</span><span class="value">${bet.win?`+$${bet.profit}`:`-$${bet.stake}`}</span></div>`).join('')}</div><div class="quick-summary-total ${totalClass}"><span>Net</span><span>${totalLabel}</span></div>`;
+  const resultMap={};
+  summary.bets.forEach(bet=>{
+    if(bet.selection) resultMap[bet.selection]=bet;
+  });
+  renderQuickBetBoard(resultMap);
+}
+function resetQuickRollUI(options={}){
+  const { preserveResults=false } = options;
+  G.quickSelection=null;
+  clearQuickActionState();
+  if(!preserveResults){
+    G.quickLastResolution=null;
+    renderQuickResultsSummary();
+  }
+  renderQuickBetSummary();
+  renderQuickBetBoard();
+}
+function clearQuickBets(){
+  if(G.mode!=='quick' || G.rolling) return;
+  const quickBets=getQuickRollBets();
+  if(!quickBets.length) return;
+  const refund=quickBets.reduce((sum, bet)=>sum+bet.amount,0);
+  G.bankroll+=refund;
+  G.bets=G.bets.filter(b=>b.betKind);
+  G.quickSelection=null;
+  G.quickLastResolution=null;
+  updateBankrollDisplay();
+  renderActiveBets();
+  renderQuickBetSummary();
+  renderQuickResultsSummary();
+  renderQuickBetBoard();
+}
+function selectQuickBet(selection, btn){
+  if(G.mode!=='quick' || G.rolling || G.gameOver) return;
+  G.quickLastResolution=null;
+  renderQuickResultsSummary();
+  const placed=placeQuickBet(selection);
+  if(!placed) return;
+  if(btn){
+    btn.classList.add('firing');
+    setTimeout(()=>btn.classList.remove('firing'), 220);
+  }
+  renderQuickBetSummary();
+  renderQuickBetBoard();
+  const quickNote=document.getElementById('quick-streak-note');
+  if(quickNote) quickNote.textContent = G.quickWinStreak>=3 ? '2W +10% · 3W +25% LIVE' : G.quickWinStreak>=2 ? '2W +10% LIVE · 3W +25%' : '2W +10% · 3W +25%';
+  setText('roll-status-line', 'Bets set. Roll when ready.');
+  document.getElementById('roll-result').textContent='Bets are locked in.';
+}
 function describeBases(){
   const spots=[];
   if(G.bases[0]) spots.push('1st');
@@ -2176,12 +2328,13 @@ function showResultBanner(title, copy){
 }
 function buildResultBannerCopy(outcome, runs){
   if(G.mode==='quick'){
-    if(outcome.type==='out') return 'No cash this roll. Quick reset is coming.';
-    if(runs>0) return `${runs} run${runs===1?'':'s'} scored. One tap sets up the next shot.`;
-    return 'Bet settled instantly. Tap back in for the next Quick Roll.';
+    if(outcome.type==='out') return 'All selected Quick Roll bets are graded now.';
+    if(runs>0) return `${runs} run${runs===1?'':'s'} scored. Every selected Quick Roll bet is now settled.`;
+    return 'Quick Roll bets are settled. Set the next board when ready.';
   }
   if(G.mode==='power'){
-    return `${runs||0} run${runs===1?'':'s'} scored. ${G.powerRollsLeft} roll${G.powerRollsLeft===1?'':'s'} remain.`;
+    const rollsLeft=Math.max(0, G.powerRollsLeft-1);
+    return `${runs||0} run${runs===1?'':'s'} scored. ${rollsLeft} roll${rollsLeft===1?'':'s'} remain.`;
   }
   if(G.mode==='h2h'){
     return `${G.h2hHalf===0?'Top':'Bottom'} ${G.h2hInning} · ${describeBases()} · ${G.outs} out${G.outs===1?'':'s'}.`;
@@ -2195,6 +2348,7 @@ function buildResultBannerCopy(outcome, runs){
   return `${describeBases()} with ${G.outs} out${G.outs===1?'':'s'}.`;
 }
 function getParlayTiming(type){
+  if(isAnytimeParlayType(type)) return G.mode==='h2h' ? 'game' : 'round';
   if(PARLAY_ROLL_TYPES.has(type)) return 'roll';
   if(PARLAY_ROUND_TYPES.has(type)) return 'round';
   if(PARLAY_GAME_TYPES.has(type)) return 'game';
@@ -2228,6 +2382,7 @@ let G = {
   lastInningSummary: null,
   quickWinStreak: 0,
   quickSelection: null,
+  quickLastResolution: null,
   autoRoll: { remaining:0, mode:null, timer:null },
   session: defaultSession(),
   audioCtx: null,
@@ -2236,10 +2391,12 @@ let G = {
   inningSingleOccurred: false,
   inningDoubleOccurred: false,
   inningHROccurred: false,
+  anytimeRunOccurred: false,
   ouParlayLine: 0,
   // Power Hour
   powerRollsLeft: 9,
   powerTotalRuns: 0,
+  powerHomeRuns: 0,
   powerRewardGiven: false,
   // Head to Head
   h2hFormat: null,      // 'cpu' | 'local' | 'remote'
@@ -2397,9 +2554,23 @@ function recordRecentPlay(outcome,v1,v2,runs){
   renderHeatMeter();
 }
 function updateInningBoard(){
+  if(G.mode==='power'){
+    setText('inning-score-outs', G.powerRollsLeft);
+    setText('inning-score-hits', G.inningHits);
+    setText('inning-score-best', G.powerHomeRuns);
+    return;
+  }
   setText('inning-score-outs', `${Math.min(G.outs,3)}/3`);
   setText('inning-score-hits', G.inningHits);
   setText('inning-score-best', G.inningKeyPlays[0] || '—');
+}
+function updateModeScoreLabels(){
+  const isPower=G.mode==='power';
+  setText('sv-outs-label', isPower ? 'Rolls' : 'Outs');
+  setText('icb-outs-label', isPower ? 'ROLLS' : 'OUTS');
+  setText('inning-score-label-1', isPower ? 'ROLLS LEFT' : 'OUTS');
+  setText('inning-score-label-2', 'HITS');
+  setText('inning-score-label-3', isPower ? 'HOME RUNS' : 'BEST PLAY');
 }
 function renderInningSummary(summary=G.lastInningSummary){
   const card=document.getElementById('inning-summary-card');
@@ -2662,9 +2833,13 @@ function nextQuickRoll(){
   if(G.rolling) return;
   G.bets=[];
   G.runs=0;
+  G.quickLastResolution=null;
   document.getElementById('btn-next-roll').classList.remove('visible');
-  document.getElementById('roll-result').textContent='Place your bets & roll!';
+  document.getElementById('roll-result').textContent='Select bets, then roll.';
   renderActiveBets();
+  renderQuickBetSummary();
+  renderQuickResultsSummary();
+  renderQuickBetBoard();
 }
 
 // ═══════════════════════════════════════════
@@ -2726,11 +2901,13 @@ function startGame(mode){
   G.inningHits=0; G.inningKeyPlays=[]; G.lastInningSummary=null;
   G.inningHitOccurred=false; G.inningSingleOccurred=false;
   G.inningDoubleOccurred=false; G.inningHROccurred=false;
+  G.anytimeRunOccurred=false;
   G.ouParlayLine=0;
   G.session.shown=false;
   G.quickSelection=null;
+  G.quickLastResolution=null;
   if(mode==='quick') G.quickWinStreak=0;
-  if(mode==='power'){ G.powerRollsLeft=9; G.powerTotalRuns=0; G.powerRewardGiven=false; updatePowerCounter(); }
+  if(mode==='power'){ G.powerRollsLeft=9; G.powerTotalRuns=0; G.powerHomeRuns=0; G.powerRewardGiven=false; updatePowerCounter(); }
   if(mode==='grandslam'){ G.bases=[true,true,true]; }
   if(mode==='clutch'){ G.bases=[false,true,true]; G.outs=1; }
   G.bets=[]; G.streakBets=[];
@@ -2826,6 +3003,7 @@ function startGame(mode){
   document.getElementById('sv-runs-label').textContent=mode==='quick'?'Earned':'Runs';
   if(mode==='power') document.getElementById('sv-runs-label').textContent='Total';
   if(mode==='clutch') document.getElementById('sv-runs-label').textContent='Pressure';
+  updateModeScoreLabels();
 
   // Outs visibility
   document.getElementById('sv-outs').textContent=String(G.outs);
@@ -2844,9 +3022,9 @@ function startGame(mode){
   document.getElementById('sv-roll').textContent='—';
   document.getElementById('lbl1').textContent='—';
   document.getElementById('lbl2').textContent='—';
-  document.getElementById('roll-result').textContent=mode==='quick'?'Tap a bet to roll.':mode==='clutch'?'Pressure spot.':'Place your bets & roll!';
+  document.getElementById('roll-result').textContent=mode==='quick'?'Select bets, then roll.':mode==='clutch'?'Pressure spot.':'Place your bets & roll!';
   document.getElementById('roll-result').className='roll-result';
-  setText('roll-status-line', mode==='quick'?'Pick a bet. Roll fires instantly.':mode==='power'?(testOverride?'Test run ready. 9 rolls fresh.':'Live now. 9 rolls only.'):mode==='grandslam'?(testOverride?'Test mode: daily lock off.':'Jackpot is live.'):mode==='clutch'?'Pressure counts are loaded.':'Bet, then roll.');
+  setText('roll-status-line', mode==='quick'?'Place one or more bets, then roll.':mode==='power'?(testOverride?'Test run ready. 9 rolls fresh.':'Live now. 9 rolls only.'):mode==='grandslam'?(testOverride?'Test mode: daily lock off.':'Jackpot is live.'):mode==='clutch'?'Pressure counts are loaded.':'Bet, then roll.');
   document.getElementById('btn-roll').textContent = 'ROLL';
   document.getElementById('btn-roll').disabled=false;
   document.getElementById('btn-next-roll').classList.remove('visible');
@@ -2876,6 +3054,9 @@ function startGame(mode){
   updateStreakDisplay();
   updateStreakOdds();
   updateInningBoard();
+  renderQuickBetSummary();
+  renderQuickResultsSummary();
+  renderQuickBetBoard();
   renderInningSummary();
   renderActiveBets();
   renderParlayLegs();
@@ -2955,12 +3136,11 @@ function finishRoll(){
 function processPlay(outcome,v1,v2){
   const re=document.getElementById('roll-result');
   const testOverride=isTestOverrideActive();
-  const liveQuickBet=G.mode==='quick' ? G.bets.find(b=>!b.betKind) : null;
-  const quickBetSnapshot=liveQuickBet ? {...liveQuickBet} : null;
+  const quickBetSnapshot=G.mode==='quick' ? getQuickRollBets().map(b=>({...b})) : [];
   let runs=0, logClass='', logText='';
 
   if(outcome.type==='out'){
-    if(G.mode!=='quick') G.outs++;
+    if(!['quick','power'].includes(G.mode)) G.outs++;
     re.textContent='OUT!'; re.className='roll-result';
     logClass='out-log'; logText=`Out (${v1}+${v2})`;
     G.lastWasHit=false;
@@ -3005,16 +3185,15 @@ function processPlay(outcome,v1,v2){
     if(G.mode==='streak') G.survivalMult=getSurvivalMult(G.hitStreak);
     G.streakHRHit=true;
     recordHR(G.mode);
+    if(G.mode==='power') G.powerHomeRuns++;
     showHRBanner(isGS&&G.mode!=='quick');
   }
 
-  // Track anytime inning events
-  if(G.mode==='inning'){
-    if(['single','double','hr'].includes(outcome.type)) G.inningHitOccurred=true;
-    if(outcome.type==='single')  G.inningSingleOccurred=true;
-    if(outcome.type==='double')  G.inningDoubleOccurred=true;
-    if(outcome.type==='hr')      G.inningHROccurred=true;
-  }
+  if(['single','double','hr'].includes(outcome.type)) G.inningHitOccurred=true;
+  if(outcome.type==='single') G.inningSingleOccurred=true;
+  if(outcome.type==='double') G.inningDoubleOccurred=true;
+  if(outcome.type==='hr') G.inningHROccurred=true;
+  if(runs>0) G.anytimeRunOccurred=true;
 
   G.runs+=runs;
   if(G.mode==='power') G.powerTotalRuns+=runs;
@@ -3065,7 +3244,7 @@ function processPlay(outcome,v1,v2){
   showResultBanner(outcome.type==='hr'?'HOME RUN':outcome.name.toUpperCase(), buildResultBannerCopy(outcome, runs));
 
   // Settle bets based on mode
-  settlePerRollBets(outcome,runs);
+  const perRollSettlement=settlePerRollBets(outcome,runs);
   settleParlays(outcome,runs);
   if(G.mode==='streak') checkStreakBets(outcome,runs);
   renderParlayTracker();
@@ -3117,6 +3296,8 @@ function processPlay(outcome,v1,v2){
   if(G.mode==='power'){
     G.powerRollsLeft--;
     updatePowerCounter();
+    updateOutDots();
+    updateInningBoard();
     if(G.powerRollsLeft<=0){
       stopAutoRoll();
       settlePowerOUBets();
@@ -3169,22 +3350,29 @@ function processPlay(outcome,v1,v2){
   }
 
   if(G.mode==='quick'){
-    const quickWon = G.quickSelection ? didQuickRollBetWin(G.quickSelection, outcome) : null;
-    if(G.quickSelection){
-      const btn=document.getElementById(getQuickRollButtonId(G.quickSelection));
-      if(btn) btn.classList.add(quickWon ? 'win' : 'loss');
-    }
-    const quickNextStreak = quickWon ? G.quickWinStreak + 1 : 0;
-    const quickWinMult = quickWon ? (quickNextStreak>=3 ? 1.25 : quickNextStreak>=2 ? 1.10 : 1) : 1;
-    const quickPayout = quickWon && quickBetSnapshot ? Math.round(quickBetSnapshot.amount * quickBetSnapshot.odds * quickWinMult) : 0;
-    if(quickBetSnapshot){
-      setText('roll-status-line', quickWon ? `${getQuickRollMeta(G.quickSelection)?.label || 'Bet'} paid $${quickPayout}.` : `${getQuickRollMeta(G.quickSelection)?.label || 'Bet'} lost $${quickBetSnapshot.amount}.`);
-      showResultBanner(outcome.type==='hr'?'HOME RUN':outcome.name.toUpperCase(), quickWon ? `Paid $${quickPayout}.` : `Lost $${quickBetSnapshot.amount}.`);
-      const quickNote=document.getElementById('quick-streak-note');
-      if(quickNote) quickNote.textContent = quickWon ? `WIN $${quickPayout} · ${quickNextStreak>=3?'+25% live':quickNextStreak>=2?'+10% live':'next win starts bonus'}` : `LOSS -$${quickBetSnapshot.amount} · streak reset`;
-      if(!quickWon) showPayoutFlash(`-$${quickBetSnapshot.amount}`, false);
-    }
-    // Auto-reset after every roll — no game over screen
+    const quickResolution=perRollSettlement?.bets?.length ? perRollSettlement : {
+      bets:quickBetSnapshot.map(bet=>({
+        label:bet.label,
+        selection:getQuickRollSelectionFromBetType(bet.type),
+        stake:bet.amount,
+        payout:0,
+        net:-bet.amount,
+        win:false
+      })),
+      totalStake:quickBetSnapshot.reduce((sum, bet)=>sum+bet.amount,0),
+      totalPayout:0,
+      net:-quickBetSnapshot.reduce((sum, bet)=>sum+bet.amount,0)
+    };
+    G.quickLastResolution=quickResolution;
+    renderQuickResultsSummary(quickResolution);
+    const quickWon=quickResolution.net>0;
+    const quickNextStreak=quickWon ? G.quickWinStreak + 1 : 0;
+    const quickNote=document.getElementById('quick-streak-note');
+    const netLabel=quickResolution.net>0 ? `+$${quickResolution.net}` : quickResolution.net<0 ? `-$${Math.abs(quickResolution.net)}` : '$0';
+    setText('roll-status-line', quickResolution.net>0 ? `Quick Roll won ${netLabel}.` : quickResolution.net<0 ? `Quick Roll lost $${Math.abs(quickResolution.net)}.` : 'Quick Roll finished even.');
+    showResultBanner(outcome.type==='hr'?'HOME RUN':outcome.name.toUpperCase(), quickResolution.net>0 ? `Net ${netLabel}.` : quickResolution.net<0 ? `Net ${netLabel}.` : 'Net even.');
+    if(quickNote) quickNote.textContent = quickWon ? `NET ${netLabel} · ${quickNextStreak>=3?'+25% live':quickNextStreak>=2?'+10% live':'next win boosts streak'}` : quickResolution.net===0 ? 'Net even. Streak reset.' : `NET ${netLabel} · streak reset`;
+    if(quickResolution.net!==0) showPayoutFlash(netLabel, quickResolution.net>0);
     if(quickWon){
       G.quickWinStreak++;
       updateChallengeProgress('quick-win',{streak:G.quickWinStreak});
@@ -3195,22 +3383,12 @@ function processPlay(outcome,v1,v2){
       recordQuickRoll(false);
       recordRoundEnd('quick', G.runs, G.hitStreak);
     }
-    const quickStreakCopy = G.quickWinStreak>=3 ? '2W +10% · 3W +25% LIVE' : G.quickWinStreak>=2 ? '2W +10% LIVE · 3W +25%' : '2W +10% · 3W +25%';
-    setTimeout(()=>{
-      clearQuickActionState();
-      G.quickSelection=null;
-      G.bets=[]; G.runs=0; G.gameOver=false;
-      document.getElementById('sv-runs').textContent='0';
-      document.getElementById('roll-result').textContent='Tap a bet to roll.';
-      document.getElementById('roll-result').className='roll-result';
-      document.getElementById('sv-roll').textContent='—';
-      document.getElementById('lbl1').textContent='—';
-      document.getElementById('lbl2').textContent='—';
-      document.querySelectorAll('.outcome-row').forEach(r=>r.classList.remove('active-roll'));
-      renderActiveBets();
-      document.getElementById('btn-roll').disabled=false;
-      setText('quick-streak-note', quickStreakCopy);
-    }, 1250);
+    renderQuickRollOdds();
+    G.bets=[]; G.runs=0; G.gameOver=false;
+    document.getElementById('sv-runs').textContent='0';
+    renderActiveBets();
+    renderQuickBetSummary();
+    document.getElementById('btn-roll').disabled=false;
   } else if(G.mode==='clutch'){
     recordRoundEnd('clutch', G.runs, G.hitStreak);
     setTimeout(()=>{
@@ -3261,6 +3439,7 @@ function settleAnyTimeBets(){
     if(b.type==='anytime-single') win = G.inningSingleOccurred;
     if(b.type==='anytime-double') win = G.inningDoubleOccurred;
     if(b.type==='anytime-hr')     win = G.inningHROccurred;
+    if(isAnytimeRunType(b.type))  win = G.anytimeRunOccurred;
     const entry = document.createElement('div'); entry.className = 'log-entry';
     if(win){ const p = Math.round(b.amount * b.odds); total += p; entry.innerHTML=`<span class="hit-log">✓ ${b.label} — WON $${p}</span>`; recordBetResult(true,p,b.amount,G.mode,b.label); recordBetHistory(b.label,true,p,b.amount,G.mode); markSessionProgress(p); }
     else   { entry.innerHTML=`<span class="out-log">✗ ${b.label} — LOST $${b.amount}</span>`; recordBetResult(false,0,b.amount,G.mode,b.label); recordBetHistory(b.label,false,0,b.amount,G.mode); markSessionProgress(0); }
@@ -3318,10 +3497,11 @@ function autoResetGame(mode){
   G.inningHits=0; G.inningKeyPlays=[];
   G.inningHitOccurred=false; G.inningSingleOccurred=false;
   G.inningDoubleOccurred=false; G.inningHROccurred=false;
+  G.anytimeRunOccurred=false;
   G.ouParlayLine=0;
-  if(mode==='power'){ G.powerRollsLeft=9; G.powerTotalRuns=0; updatePowerCounter(); }
+  if(mode==='power'){ G.powerRollsLeft=9; G.powerTotalRuns=0; G.powerHomeRuns=0; updatePowerCounter(); }
   if(mode==='grandslam'){ G.bases=[true,true,true]; }
-  G.bets=[]; G.streakBets=[];
+  G.bets=[]; G.streakBets=[]; G.quickLastResolution=null;
 
   // Reset UI
   document.getElementById('sv-runs').textContent='0';
@@ -3344,7 +3524,11 @@ function autoResetGame(mode){
   setText('roll-status-line', mode==='power'?'Fresh round ready.':'Place your bets & roll!');
   updateStreakDisplay();
   updateStreakOdds();
+  updateModeScoreLabels();
   updateInningBoard();
+  renderQuickBetSummary();
+  renderQuickResultsSummary();
+  renderQuickBetBoard();
   renderInningSummary();
   renderActiveBets();
   renderParlayTracker();
@@ -3363,20 +3547,24 @@ function autoResetGame(mode){
 // ═══════════════════════════════════════════
 function settlePerRollBets(outcome,runs){
   const perRollBets=G.bets.filter(b=>!b.betKind);
-  if(!perRollBets.length) return;
+  const summary={ bets:[], totalStake:0, totalPayout:0, net:0 };
+  if(!perRollBets.length) return summary;
   let total=0;
   const pl=document.getElementById('payout-log');
   perRollBets.forEach(b=>{
-    let win=false;
-    if(b.type==='hit'     &&outcome.cat==='hit')    win=true;
-    if(b.type==='out'     &&outcome.cat==='out')    win=true;
-    if(b.type==='quick-hit' && ['single','double','hr'].includes(outcome.type)) win=true;
-    if(b.type==='quick-out' && outcome.cat==='out') win=true;
-    if(b.type==='single'  &&outcome.type==='single')win=true;
-    if(b.type==='double'  &&outcome.type==='double')win=true;
-
-    if(b.type==='hr'      &&outcome.type==='hr')    win=true;
+    const win=evaluatePerRollBetWin(b,outcome,runs);
     const entry=document.createElement('div'); entry.className='log-entry';
+    const result={
+      label:b.label,
+      type:b.type,
+      selection:getQuickRollSelectionFromBetType(b.type),
+      stake:b.amount,
+      payout:0,
+      profit:0,
+      net:-b.amount,
+      win
+    };
+    summary.totalStake+=b.amount;
     if(win){
       const streakMult=(G.mode==='streak'&&G.survivalMult>1)?G.survivalMult:1;
       const quickNextStreak=G.mode==='quick' ? G.quickWinStreak+1 : 0;
@@ -3388,6 +3576,10 @@ function settlePerRollBets(outcome,runs){
       if(quickMult>1) multNotes.push(`${quickMult.toFixed(2)}x streak`);
       const multStr=multNotes.length?` (${multNotes.join(' + ')})`:'';
       total+=p;
+      result.payout=p;
+      result.profit=p-b.amount;
+      result.net=p-b.amount;
+      summary.totalPayout+=p;
       entry.innerHTML=`<span class="hit-log">✓ ${b.label} WON $${p}${multStr}</span>`;
       recordBetResult(true,p,b.amount,G.mode,b.label);
       recordBetHistory(b.label,true,p,b.amount,G.mode);
@@ -3400,12 +3592,15 @@ function settlePerRollBets(outcome,runs){
       recordBetHistory(b.label,false,0,b.amount,G.mode);
       markSessionProgress(0);
     }
+    summary.bets.push(result);
     pl.insertBefore(entry,pl.firstChild);
   });
   G.bets=G.bets.filter(b=>b.betKind);
   G.bankroll+=total;
   updateBankrollDisplay(); renderActiveBets();
-  if(total>0) showPayoutFlash(`+$${total}`,true);
+  if(total>0 && G.mode!=='quick') showPayoutFlash(`+$${total}`,true);
+  summary.net=summary.totalPayout-summary.totalStake;
+  return summary;
 }
 
 function checkStreakBets(outcome,runs){
@@ -3495,10 +3690,28 @@ function evaluateRollParlayLeg(leg,outcome,runs){
   if(leg.type==='grandslam') return outcome.type==='hr' && runs===4;
   return false;
 }
+function evaluatePerRollBetWin(bet,outcome,runs){
+  if(bet.type==='hit') return outcome.cat==='hit';
+  if(bet.type==='out') return outcome.cat==='out';
+  if(bet.type==='quick-hit') return ['single','double','hr'].includes(outcome.type);
+  if(bet.type==='quick-out') return outcome.cat==='out';
+  if(bet.type==='single') return outcome.type==='single';
+  if(bet.type==='double') return outcome.type==='double';
+  if(bet.type==='hr') return outcome.type==='hr';
+  return evaluateRollParlayLeg(bet,outcome,runs);
+}
+function evaluateLiveAnytimeLeg(leg,outcome,runs){
+  if(leg.type==='anytime-single') return outcome.type==='single';
+  if(leg.type==='anytime-double') return outcome.type==='double';
+  if(leg.type==='anytime-hr') return outcome.type==='hr';
+  if(isAnytimeRunType(leg.type)) return runs>0;
+  return false;
+}
 function evaluateDeferredParlayLeg(leg){
   if(leg.type==='anytime-single') return G.inningSingleOccurred;
   if(leg.type==='anytime-double') return G.inningDoubleOccurred;
   if(leg.type==='anytime-hr') return G.inningHROccurred;
+  if(isAnytimeRunType(leg.type)) return G.anytimeRunOccurred;
   if(leg.type==='ou-over') return (G.mode==='power' ? G.powerTotalRuns : G.runs) > leg.line;
   if(leg.type==='ou-under') return (G.mode==='power' ? G.powerTotalRuns : G.runs) < leg.line;
   if(leg.type==='ml-p1') return G.h2hRuns[0] > G.h2hRuns[1];
@@ -3546,12 +3759,18 @@ function settleParlays(outcome,runs){
   if(!G.activeParlays.length) return;
   let total=0;
   G.activeParlays.forEach(parlay=>{
-    if(parlay.busted || parlay.done || parlay.timing!=='roll') return;
+    if(parlay.busted || parlay.done) return;
     parlay.legs.forEach(leg=>{
-      if(leg.settled!==null) return;
-      leg.settled = evaluateRollParlayLeg(leg,outcome,runs);
+      if(leg.settled===true) return;
+      if(isAnytimeParlayType(leg.type) && evaluateLiveAnytimeLeg(leg,outcome,runs)){
+        leg.settled=true;
+        return;
+      }
+      if(parlay.timing==='roll' && leg.settled===null){
+        leg.settled = evaluateRollParlayLeg(leg,outcome,runs);
+      }
     });
-    total += finalizeParlaySettlement(parlay);
+    if(parlay.timing==='roll') total += finalizeParlaySettlement(parlay);
   });
   G.activeParlays=G.activeParlays.filter(parlay=>!parlay.busted && !parlay.done);
   G.bankroll+=total;
@@ -3600,29 +3819,16 @@ function placeQuickBet(selection){
   const meta=getQuickRollMeta(selection);
   if(!meta) return false;
   if(!ensureStakeAvailable(G.chipValue)) return false;
-  G.bets=[{type:meta.betType,label:meta.label,odds:getQuickRollBetOdds(selection),amount:G.chipValue}];
+  const existing=G.bets.find(b=>!b.betKind && b.type===meta.betType);
+  if(existing) existing.amount+=G.chipValue;
+  else G.bets.push({type:meta.betType,label:meta.label,odds:getQuickRollBetOdds(selection),amount:G.chipValue});
   G.bankroll-=G.chipValue;
   updateBankrollDisplay();
   renderActiveBets();
   return true;
 }
 function quickBetAndRoll(type,btn){
-  if(G.mode!=='quick') return;
-  if(G.rolling || G.gameOver) return;
-  clearQuickActionState();
-  if(btn){
-    btn.classList.add('selected');
-    btn.classList.add('firing');
-    setTimeout(()=>btn.classList.remove('firing'), 220);
-  }
-  const placed=placeQuickBet(type);
-  if(!placed) return;
-  G.quickSelection=type;
-  const quickNote=document.getElementById('quick-streak-note');
-  if(quickNote) quickNote.textContent = `${getQuickRollMeta(type)?.label || 'Bet'} locked · ${formatQuickRollOddsLabel(type)}`;
-  setTimeout(()=>{
-    if(!G.rolling) rollDice();
-  }, 120);
+  selectQuickBet(type,btn);
 }
 
 // Standard O/U bet (settles at end of round for all modes)
@@ -3727,7 +3933,7 @@ function placeStreakBet(type,label,odds){
   updateStreakPayoutPreview(odds);
 }
 
-const PARLAY_RAKE = 0.10; // 10% house rake applied to each parlay leg
+const PARLAY_RAKE = quickRollPayoutConfig.parlayRake; // centralized parlay rake target
 function addParlayLeg(type,label,displayOdds){
   // Apply rake: raked odds = displayOdds * (1 - rake), floored to 2dp
   const rakedOdds = Math.round(displayOdds * (1 - PARLAY_RAKE) * 100) / 100;
@@ -3759,7 +3965,11 @@ function placeParlay(){
   }
   const mult=G.parlayLegs.reduce((a,l)=>a*l.odds,1);
   const timing=timings[0] || 'roll';
-  const note=timing==='roll' ? 'Waiting for the next roll.' : timing==='round' ? 'Waiting for the inning result.' : 'Waiting for the final matchup.';
+  const note=timing==='roll'
+    ? 'Waiting for the next roll.'
+    : timing==='round'
+      ? (G.mode==='power' ? 'Waiting for the session result.' : 'Waiting for the inning result.')
+      : 'Waiting for the final matchup.';
   G.activeParlays.push({legs:G.parlayLegs.map(leg=>({...leg, settled:null})),stake,mult,timing,busted:false,done:false,note});
   G.bankroll-=stake;
   updateBankrollDisplay();
@@ -3773,14 +3983,22 @@ function placeParlay(){
 function clearAllBets(){
   const refund=[...G.bets,...G.streakBets].reduce((s,b)=>s+b.amount,0);
   G.bankroll+=refund; G.bets=[]; G.streakBets=[];
+  G.quickLastResolution=null;
   updateBankrollDisplay(); renderActiveBets();
+  renderQuickBetSummary();
+  renderQuickResultsSummary();
+  renderQuickBetBoard();
 }
 
 function renderActiveBets(){
   const el=document.getElementById('active-bets-box');
   const all=[...G.bets,...G.streakBets];
   if(!all.length){ el.innerHTML='No bets placed.'; return; }
-  el.innerHTML=all.map((b,i)=>`<div class="bet-item"><span>${b.label}${G.streakBets.includes(b)?'<span style="color:var(--fire);font-size:9px"> 🔥</span>':''} (${b.odds}x)</span><span class="bamt">$${b.amount} <span class="brm" onclick="removeSingleBet(${i})">✕</span></span></div>`).join('');
+  el.innerHTML=all.map((b,i)=>{
+    const quickSelection=(G.mode==='quick' && !b.betKind) ? getQuickRollSelectionFromBetType(b.type) : null;
+    const oddsLabel=quickSelection ? formatQuickRollOddsLabel(quickSelection) : `${b.odds}x`;
+    return `<div class="bet-item"><span>${b.label}${G.streakBets.includes(b)?'<span style="color:var(--fire);font-size:9px"> 🔥</span>':''} (${oddsLabel})</span><span class="bamt">$${b.amount} <span class="brm" onclick="removeSingleBet(${i})">✕</span></span></div>`;
+  }).join('');
 }
 
 function removeSingleBet(i){
@@ -3792,6 +4010,12 @@ function removeSingleBet(i){
   if(bi>=0) G.bets.splice(bi,1);
   else if(si>=0) G.streakBets.splice(si,1);
   updateBankrollDisplay(); renderActiveBets();
+  if(G.mode==='quick'){
+    G.quickLastResolution=null;
+    renderQuickBetSummary();
+    renderQuickResultsSummary();
+    renderQuickBetBoard();
+  }
 }
 
 function renderParlayLegs(){
@@ -3902,17 +4126,22 @@ function updateBases(){
   const ir3=document.getElementById('ib-runner3'); if(ir3) ir3.className='inline-runner inline-runner-3rd'+(G.bases[2]?' show':'');
 }
 function updateOutDots(){
-  const o=Math.min(G.outs,3);
+  const isPower=G.mode==='power';
+  const o=isPower ? G.powerRollsLeft : Math.min(G.outs,3);
   document.getElementById('sv-outs').textContent=o;
   setText('icb-outs',o);
+  const standardDots=document.getElementById('out-dots-standard');
+  const inlineDots=document.querySelector('#inline-standard-status .inline-out-pips');
+  if(standardDots) standardDots.style.display=isPower ? 'none' : 'flex';
+  if(inlineDots) inlineDots.style.display=isPower ? 'none' : 'flex';
   // Left panel pips
-  const p1=document.getElementById('out-pip-1'); if(p1) p1.className='out-pip'+(G.outs>=1?' on':'');
-  const p2=document.getElementById('out-pip-2'); if(p2) p2.className='out-pip'+(G.outs>=2?' on':'');
-  const p3=document.getElementById('out-pip-3'); if(p3) p3.className='out-pip'+(G.outs>=3?' on':'');
+  const p1=document.getElementById('out-pip-1'); if(p1) p1.className='out-pip'+(!isPower&&G.outs>=1?' on':'');
+  const p2=document.getElementById('out-pip-2'); if(p2) p2.className='out-pip'+(!isPower&&G.outs>=2?' on':'');
+  const p3=document.getElementById('out-pip-3'); if(p3) p3.className='out-pip'+(!isPower&&G.outs>=3?' on':'');
   // Inline center pips
-  const ib1=document.getElementById('ib-out1'); if(ib1) ib1.className='inline-out-pip'+(G.outs>=1?' on':'');
-  const ib2=document.getElementById('ib-out2'); if(ib2) ib2.className='inline-out-pip'+(G.outs>=2?' on':'');
-  const ib3=document.getElementById('ib-out3'); if(ib3) ib3.className='inline-out-pip'+(G.outs>=3?' on':'');
+  const ib1=document.getElementById('ib-out1'); if(ib1) ib1.className='inline-out-pip'+(!isPower&&G.outs>=1?' on':'');
+  const ib2=document.getElementById('ib-out2'); if(ib2) ib2.className='inline-out-pip'+(!isPower&&G.outs>=2?' on':'');
+  const ib3=document.getElementById('ib-out3'); if(ib3) ib3.className='inline-out-pip'+(!isPower&&G.outs>=3?' on':'');
   updateInningBoard();
 }
 function addLog(text,cls,v1,v2){
@@ -4143,12 +4372,12 @@ function updateH2HMiniField(side){
   // Bases
   for(let b=1;b<=3;b++){
     const el=document.getElementById(`h2h-mb-${p}-${b}`);
-    if(el) el.className='h2h-mini-base'+(bases[b-1]?' on':'');
+    if(el) el.className=H2H_MINI_BASE_CLASSES[b-1]+(bases[b-1]?' on':'');
   }
   // Runners
   for(let r=1;r<=3;r++){
     const el=document.getElementById(`h2h-mr-${p}-${r}`);
-    if(el) el.className='h2h-mini-runner'+(bases[r-1]?' show':'');
+    if(el) el.className=H2H_MINI_RUNNER_CLASSES[r-1]+(bases[r-1]?' show':'');
   }
   // Outs
   for(let o=1;o<=3;o++){
@@ -4165,11 +4394,11 @@ function updateInlineH2HFields(){
     const outs=G.h2hOuts[side];
     for(let b=1;b<=3;b++){
       const el=document.getElementById(`ih2h-b${p}-${b}`);
-      if(el) el.className='inline-base'+(bases[b-1]?' on':'');
+      if(el) el.className=INLINE_H2H_BASE_CLASSES[b-1]+(bases[b-1]?' on':'');
     }
     for(let r=1;r<=3;r++){
       const el=document.getElementById(`ih2h-r${p}-${r}`);
-      if(el) el.className='inline-runner'+(bases[r-1]?' show':'');
+      if(el) el.className=INLINE_H2H_RUNNER_CLASSES[r-1]+(bases[r-1]?' show':'');
     }
     for(let o=1;o<=3;o++){
       const el=document.getElementById(`ih2h-o${p}-${o}`);
@@ -4303,6 +4532,7 @@ function endH2H(winnerIdx){
     saveStats(s);
   }
   settleH2HBets(winnerIdx);
+  settleAnyTimeBets();
   settleAnyTimeParlayLegs();
   // Show play again after delay
   setTimeout(()=>{
